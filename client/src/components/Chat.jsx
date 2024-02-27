@@ -62,7 +62,6 @@ export default function Chat() {
 
   // Handles the submit event on form submit.
   const onSubmit = async (formData) => {
-    console.log(id)
     try {
       setLoading(true);
       setNewQuestion(formData.text);
@@ -79,18 +78,15 @@ export default function Chat() {
       );
       const result = await response.data;
       setNewQuestion("");
-      console.log(result);
-      console.log(result.data);
       setMessages(result.data);
       reset();
+      setLoading(false);
       if (!id) { 
-        navigate(`/chat/${result.chatId}`);
+        navigate(`/chat/${result.chatId}`, { replace: true });
       }
     } catch (error) {
       setLoading(false);
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
