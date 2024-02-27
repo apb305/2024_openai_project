@@ -1,0 +1,24 @@
+import { useAuth } from "../context/AuthContext";
+
+export default function Home() {
+  const { currentUser } = useAuth();
+  return (
+    <main>
+      <div className="container text-center">
+        <h1 className="mt-5 mb-3">FAQtual</h1>
+        <p className="lead">
+          Welcome to FAQtual, your AI-powered tool for effortless document
+          analysis. Seamlessly search through your documents with advanced AI
+          technology.
+        </p>
+        {currentUser ? (
+          <a className="btn btn-primary mt-2" href="/dashboard">
+            Get Started
+          </a>
+        ) : (
+          <a className="btn btn-primary mt-2" href="/signin">Get Started</a>
+        )}
+      </div>
+    </main>
+  );
+}
