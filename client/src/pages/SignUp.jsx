@@ -60,7 +60,7 @@ export default function SignUp() {
   return (
     <Container className="d-flex align-items-center justify-content-center">
       {/* {currentUser && <Navigate to="/" replace={true} />} */}
-      <Card className="shadow border-0 mt-5">
+      <Card className="shadow border-0 mt-1">
         <Card.Body>
           <div className="text-center">
             <Image
