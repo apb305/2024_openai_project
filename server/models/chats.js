@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const ThreadSchema = new Schema(
+const ChatSchema = new Schema(
   {
     uid: {
       type: String,
@@ -11,6 +11,10 @@ const ThreadSchema = new Schema(
       type: String,
       required: true,
     },
+    chatTitle: {
+        type: String,
+        required: true,
+    },
     threadId: {
       type: String,
       required: true,
@@ -19,7 +23,7 @@ const ThreadSchema = new Schema(
   { timestamps: true }
 );
 
-const Thread =
-  mongoose.models.Thread || mongoose.model("threads", ThreadSchema);
+const Chat =
+  mongoose.models.Chat || mongoose.model("chats", ChatSchema);
 
-module.exports = Thread;
+module.exports = Chat;

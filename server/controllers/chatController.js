@@ -1,14 +1,14 @@
 const { getOpenAIResponse } = require("../services/openai");
 const OpenAI = require("openai");
 const mongoose = require("mongoose");
-require("../models/threads");
-const Thread = mongoose.model("threads");
+require("../models/chats");
+const Chat = mongoose.model("chats");
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-const generateResponse = async (req, res) => {
+const generateNewChat = async (req, res) => {
   try {
     const response = await getOpenAIResponse(req.body.text, req.body.chatId, req.body.uid);
     res.status(200).json(response);
@@ -17,11 +17,11 @@ const generateResponse = async (req, res) => {
   }
 };
 
-const getThread = async (req, res) => {
+const getChat = async (req, res) => {
   try {
-    const threadExists = await Thread.findOne({ chatId: req.query.chatId});
-    if (threadExists) {
-      const { data } = await openai.beta.threads.messages.list(threadExists.threadId, {
+    const chatExists = await Chat.findOne({ chatId: req.query.chatId});
+    if (chatExists) {
+      const { data } = await openai.beta.threads.messages.list(chatExists.threadId, {
         order: "asc",
         limit: 50,
       });
@@ -34,27 +34,27 @@ const getThread = async (req, res) => {
   }
 }
 
-const getAllThreads = async (req, res) => {
+const getAllChats = async (req, res) => {
   try {
-    const threads = await Thread.find({uid: req.query.uid});
-    res.status(200).json(threads);
+    const chats = await Chat.find({uid: req.query.uid});
+    res.status(200).json(chats);
   } catch (error) {
     res.status(400).send("An error has occured");
   }
 }
 
 
-const deleteThread = async (req, res) => { 
+const deleteChat = async (req, res) => { 
   try {
-    const threadExists = await Thread.findOne({ uid: req.user.uid});
-    if (threadExists) {
-      await openai.beta.threads.delete(threadExists.threadId);
-      await Thread.deleteOne({ uid: req.user.uid });
+    const chatExists = await Chat.findOne({ uid: req.user.uid});
+    if (chatExists) {
+      await openai.beta.threads.delete(chatExists.threadId);
+      await Chat.deleteOne({ uid: req.user.uid });
     }
-    res.status(200).send("Thread deleted");
+    res.status(200).send("Chat deleted");
   } catch (error) {
     res.status(400).send("An error has occured");
   }
 }
 
-module.exports = { generateResponse, getThread, deleteThread, getAllThreads };
+module.exports = { generateNewChat, getChat, deleteChat, getAllChats };

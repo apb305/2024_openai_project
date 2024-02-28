@@ -14,6 +14,8 @@ import ChatMessages from "./ChatMessages";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import instance from "../config/axiosConfig";
+import { CgAttachment } from "react-icons/cg";
+import { BsUpload } from "react-icons/bs";
 
 export default function Chat() {
   const [isLoading, setLoading] = useState(false);
@@ -29,6 +31,7 @@ export default function Chat() {
   const { currentUser } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (id) {
@@ -71,7 +74,7 @@ export default function Chat() {
         "/api/chats",
         {
           uid: currentUser.uid,
-          chatId: id,
+          chatId: id ? id : null,
           text: formData.text,
         },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -81,7 +84,7 @@ export default function Chat() {
       setMessages(result.data);
       reset();
       setLoading(false);
-      if (!id) { 
+      if (!id) {
         navigate(`/chat/${result.chatId}`, { replace: true });
       }
     } catch (error) {
@@ -90,9 +93,16 @@ export default function Chat() {
     }
   };
 
-  //   if (status === "loading") {
-  //     return <div className="text-center mt-5">Loading...</div>;
-  //   }
+  const handleButtonClick = () => {
+    // Trigger the hidden file input click event
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    console.log(file.name);
+    // Process the file here (e.g., uploading to a server or reading the file)
+  };
 
   return (
     <>
@@ -116,11 +126,20 @@ export default function Chat() {
                 messages={messages}
                 previousMessagesLoading={isMessagesLoading}
               />
-
               <Card.Footer className="text-muted bg-light">
                 {/* Chat input field and button section */}
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <InputGroup className="mb-1">
+                    <Form.Control
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      style={{ display: "none" }} // Hide the file input
+                    />
+                    {/* Custom button that triggers the file input */}
+                    <Button onClick={handleButtonClick} style={{ backgroundColor: "rgb(25, 118, 210)" }}>
+                      <CgAttachment />
+                    </Button>
                     <FormControl
                       id="messageInput"
                       type="text"

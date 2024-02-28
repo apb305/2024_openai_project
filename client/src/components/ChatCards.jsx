@@ -38,21 +38,23 @@ export default function ChatCards({ chatThreads, loading }) {
               <Col key={index}>
                 <Card
                   onClick={() => handleClick(data.chatId)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", minHeight: "125px"}}
                 >
                   <Card.Body className="text-end">
-                    <Card.Title className="text-start">Card Title</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted text-start">
-                      Chat Created on{" "}
+                    <Card.Title className="text-start text-truncate">{data.chatTitle}</Card.Title>
+                    {/* <Card.Subtitle className="mb-2 text-muted text-start">
+                      Created on{" "}
                       {format(new Date(data.createdAt), "MM-dd-yyyy")}
-                    </Card.Subtitle>
-                    <Card.Text className="text-start">
+                    </Card.Subtitle> */}
+                    {/* <Card.Text className="text-start">
                       Some quick example text to build on the card title and
                       make up the bulk of the card's content.
-                    </Card.Text>
+                    </Card.Text> */}
                     {/* <Card.Link href="#" className="text-decoration-none">View</Card.Link> */}
                     {/* <Card.Link href="#" className="text-danger text-decoration-none">Delete</Card.Link> */}
                   </Card.Body>
+                  <Card.Footer className="text-muted bg-white border-0"> Created {" "}
+                      {format(new Date(data.createdAt), "MM-dd-yyyy")}</Card.Footer>
                 </Card>
               </Col>
             ))}

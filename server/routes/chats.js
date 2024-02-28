@@ -1,20 +1,20 @@
 const express = require("express");
 const router = express.Router();
-require("../models/threads");
+require("../models/chats");
 const {
-  getThread,
-  generateResponse,
-  deleteThread,
-  getAllThreads,
+  getChat,
+  generateNewChat,
+  deleteChat,
+  getAllChats,
 } = require("../controllers/chatController");
 const { ensureAuthenticated } = require("../middleware/auth");
 
 router
   .route("/")
-  .get(ensureAuthenticated, getThread)
-  .delete(ensureAuthenticated, deleteThread)
-  .post(ensureAuthenticated, generateResponse);
+  .get(ensureAuthenticated, getChat)
+  .delete(ensureAuthenticated, deleteChat)
+  .post(ensureAuthenticated, generateNewChat);
 
-router.route("/all").get(ensureAuthenticated, getAllThreads);
+router.route("/all").get(ensureAuthenticated, getAllChats);
 
 module.exports = router;

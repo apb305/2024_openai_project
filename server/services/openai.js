@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const OpenAI = require("openai");
-require("../models/threads");
-const Thread = mongoose.model("threads");
+require("../models/chats");
+const Chat = mongoose.model("chats");
 const { v4: uuidv4 } = require("uuid");
 
 const waitForRunCompletion = async (openai, threadId, runId) => {
@@ -29,10 +29,11 @@ const createThreadAndRunAssistant = async (openai, assistant, uid, text) => {
     assistant_id: assistant.id,
   });
 
-  await Thread.create({
+  await Chat.create({
     uid: uid,
     threadId: thread.id,
-    chatId: chatId
+    chatId: chatId,
+    chatTitle: text,
   });
 
   await waitForRunCompletion(openai, thread.id, run.id);
@@ -46,6 +47,7 @@ const createThreadAndRunAssistant = async (openai, assistant, uid, text) => {
 };
 
 const getOpenAIResponse = async (text, chatId, uid) => {
+
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -56,7 +58,7 @@ const getOpenAIResponse = async (text, chatId, uid) => {
   );
 
   //Check for existing thread
-  const threadExists = await Thread.findOne({ chatId: chatId });
+  const threadExists = await Chat.findOne({ chatId: chatId });
 
   if (threadExists) {
 
