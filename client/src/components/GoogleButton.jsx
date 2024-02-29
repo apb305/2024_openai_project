@@ -8,7 +8,7 @@ export default function GoogleButton({handleGoogleLogin, loading}) {
       <Button
         disabled={loading}
         variant="white"
-        className="w-100 mb-3 text-dark shadow-sm"
+        className="w-100 mb-3 text-dark shadow"
         type="submit"
         style={{border: "none"}}
         onClick={handleGoogleLogin}

@@ -3,6 +3,7 @@ const OpenAI = require("openai");
 require("../models/chats");
 const Chat = mongoose.model("chats");
 const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
 
 const waitForRunCompletion = async (openai, threadId, runId) => {
   let completed = false;
@@ -47,21 +48,34 @@ const createThreadAndRunAssistant = async (openai, assistant, uid, text) => {
 };
 
 const getOpenAIResponse = async (text, chatId, uid) => {
-
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
+  // const file = await openai.files.create({
+  //   file: fs.createReadStream("chat.txt"),
+  //   purpose: "assistants",
+  // });
+
   //Retrieve assistant
   const assistant = await openai.beta.assistants.retrieve(
-    process.env.ASSISTANT_ID
+    process.env.ASSISTANT_ID,
   );
+
+  //Retrieve assistant
+  // const assistant = await openai.beta.assistants.create(
+  //   (name = "Terrific Travels"),
+  //   (instructions =
+  //     "You are a helpful assistance named Jake, and your job is to review the knowledge base documents that are uploaded and help provide answers to solutions. Rules: 1. Only use the provided context 2. Always ask if the users question was answered."),
+  //   (model = "gpt-4-1106-preview"),
+  //   (tools = [{ type: "retrieval" }]),
+  //   (file_ids = [file.id])
+  // );
 
   //Check for existing thread
   const threadExists = await Chat.findOne({ chatId: chatId });
 
   if (threadExists) {
-
     const chatId = threadExists.chatId;
 
     // If thread exists, continue the conversation

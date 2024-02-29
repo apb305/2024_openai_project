@@ -12,8 +12,8 @@ const ChatSchema = new Schema(
       required: true,
     },
     chatTitle: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     threadId: {
       type: String,
@@ -23,7 +23,6 @@ const ChatSchema = new Schema(
   { timestamps: true }
 );
 
-const Chat =
-  mongoose.models.Chat || mongoose.model("chats", ChatSchema);
+const Chat = mongoose.models.Chat || mongoose.model("chats", ChatSchema);
 
 module.exports = Chat;

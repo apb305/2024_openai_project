@@ -22,7 +22,7 @@ export default function ChatCards({ chatThreads, loading }) {
         <Spinner animation="border" />
         </div>
       ) : (
-        <Row xs={1} md={4} className="g-4 mt-3">
+        <Row xs={1} md={4} className="g-2 mt-3">
           <Col>
             <Card onClick={() => handleClick()} style={{ cursor: "pointer" }}>
               {" "}
