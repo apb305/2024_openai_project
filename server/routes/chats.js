@@ -8,12 +8,14 @@ const {
   getAllChats,
 } = require("../controllers/chatController");
 const { ensureAuthenticated } = require("../middleware/auth");
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
-router
-  .route("/")
+router.post("/", ensureAuthenticated, upload.single('file'), generateNewChat);
+
+router.route("/")
   .get(ensureAuthenticated, getChat)
-  .delete(ensureAuthenticated, deleteChat)
-  .post(ensureAuthenticated, generateNewChat);
+  .delete(ensureAuthenticated, deleteChat);
 
 router.route("/all").get(ensureAuthenticated, getAllChats);
 

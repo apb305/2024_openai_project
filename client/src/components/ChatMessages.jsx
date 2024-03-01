@@ -90,7 +90,7 @@ loader while waiting for response */}
             <div className="flex-shrink-0">
               <FontAwesomeIcon size="2x" icon={faRobot} />
             </div>
-            <div className="lds-ellipsis ms-3">
+            <div className="lds-ellipsis ms-2">
               <div></div>
               <div></div>
               <div></div>

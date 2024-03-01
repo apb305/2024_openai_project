@@ -12,10 +12,10 @@ import {
 import { useForm } from "react-hook-form";
 import ChatMessages from "./ChatMessages";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import instance from "../config/axiosConfig";
 import { CgAttachment } from "react-icons/cg";
-import { BsUpload } from "react-icons/bs";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 export default function Chat() {
   const [isLoading, setLoading] = useState(false);
@@ -32,6 +32,15 @@ export default function Chat() {
   const { id } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileErrorMessage, setFileErrorMessage] = useState(null);
+  const fileTypes = [
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/json",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "text/plain",
+  ];
 
   useEffect(() => {
     if (id) {
@@ -64,22 +73,25 @@ export default function Chat() {
   };
 
   // Handles the submit event on form submit.
-  const onSubmit = async (formData) => {
+  const onSubmit = async (data) => {
+    // if (!selectedFile) return; // Check if a file is selected
+   
     try {
       setLoading(true);
-      setNewQuestion(formData.text);
-
+      setNewQuestion(data.text);
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("uid", currentUser.uid);
+      formData.append("chatId", id ? id : '');
+      formData.append("text", data.text);
       const token = await currentUser.getIdToken();
       const response = await instance.post(
         "/api/chats",
-        {
-          uid: currentUser.uid,
-          chatId: id ? id : null,
-          text: formData.text,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
+        formData,
+        { headers: { Authorization: `Bearer ${token}`}}
       );
       const result = await response.data;
+      setSelectedFile(null);
       setNewQuestion("");
       setMessages(result.data);
       reset();
@@ -98,10 +110,22 @@ export default function Chat() {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    console.log(file.name);
-    // Process the file here (e.g., uploading to a server or reading the file)
+  const handleFileChange = (e) => {
+    let selected = e.target.files[0];
+    if (selected && fileTypes.includes(selected.type)) {
+      setSelectedFile(selected);
+      setFileErrorMessage("");
+    } else {
+      setSelectedFile(null);
+      setFileErrorMessage(
+        "File must be .docx, .pdf, .json, .pptx, or .txt"
+      );
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFileErrorMessage("");
+    setSelectedFile(null);
   };
 
   return (
@@ -127,17 +151,43 @@ export default function Chat() {
                 previousMessagesLoading={isMessagesLoading}
               />
               <Card.Footer className="text-muted bg-light">
+                {selectedFile && (
+                  <div className="my-2">
+                    {" "}
+                    <p className="d-inline">
+                      <strong>Selected file:</strong> {selectedFile.name} -
+                    </p>{" "}
+                    <span className="">
+                      {" "}
+                      <Link
+                        className=" btn-sm text-decoration-none text-danger"
+                        variant="danger"
+                        onClick={handleRemoveFile}
+                      >
+                        Remove
+                      </Link>
+                    </span>
+                  </div>
+                )}
+                {fileErrorMessage && (
+                  <Alert variant="danger" className="mt-2">
+                    {fileErrorMessage}
+                  </Alert>
+                )}
                 {/* Chat input field and button section */}
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <InputGroup className="mb-1">
-                    <Form.Control
+                  <Form.Control
                       type="file"
                       ref={fileInputRef}
-                      onChange={handleFileChange}
                       style={{ display: "none" }} // Hide the file input
+                      onChange={handleFileChange}
                     />
                     {/* Custom button that triggers the file input */}
-                    <Button onClick={handleButtonClick} style={{ backgroundColor: "rgb(25, 118, 210)" }}>
+                    <Button
+                      onClick={handleButtonClick}
+                      style={{ backgroundColor: "rgb(25, 118, 210)" }}
+                    >
                       <CgAttachment />
                     </Button>
                     <FormControl

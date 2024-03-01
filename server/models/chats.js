@@ -19,6 +19,14 @@ const ChatSchema = new Schema(
       type: String,
       required: true,
     },
+    assistantId: {
+      type: String,
+      required: true,
+    },
+    fileId: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
