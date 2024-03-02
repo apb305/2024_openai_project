@@ -25,7 +25,7 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
     purpose: "assistants",
   });
 
-  console.log(file);
+  console.log(newfile.path);
 
   const assistant = await openai.beta.assistants.create({
     name: "File Analyzer Assistant",
@@ -48,12 +48,12 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
     assistant_id: assistant.id,
   });
 
-  //Save chat to database
+  //Save chat data to database
   await Chat.create({
     uid: uid,
     threadId: thread.id,
     chatId: chatId,
-    chatTitle: text,
+    chatTitle: newfile.originalname,
     assistantId: assistant.id,
     fileId: file.id,
   });

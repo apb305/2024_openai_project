@@ -10,6 +10,7 @@ const openai = new OpenAI({
 
 const generateNewChat = async (req, res) => {
   try {
+    console.log(req.file)
     const response = await getOpenAIResponse(
       req.body.text,
       req.body.chatId,

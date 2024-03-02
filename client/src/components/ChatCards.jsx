@@ -41,11 +41,10 @@ export default function ChatCards({ chatThreads, loading }) {
                   style={{ cursor: "pointer", minHeight: "125px"}}
                 >
                   <Card.Body className="text-end">
-                    <Card.Title className="text-start text-truncate">{data.chatTitle}</Card.Title>
-                    {/* <Card.Subtitle className="mb-2 text-muted text-start">
-                      Created on{" "}
-                      {format(new Date(data.createdAt), "MM-dd-yyyy")}
-                    </Card.Subtitle> */}
+                    {/* <Card.Title className="text-start text-truncate">{data.chatTitle}</Card.Title> */}
+                    <Card.Subtitle className="mb-2 text-muted text-start text-break">
+                    {data.chatTitle}
+                    </Card.Subtitle>
                     {/* <Card.Text className="text-start">
                       Some quick example text to build on the card title and
                       make up the bulk of the card's content.
