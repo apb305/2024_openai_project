@@ -12,7 +12,6 @@ module.exports = {
   ensureAuthenticated: function(req, res, next) {
     const tokenString = req.headers.authorization ? req.headers.authorization.split(" ") : null;
 
-    // Using early returns to make the code cleaner and more readable
     if (!tokenString) {
       return res.status(401).send("Authorization header is missing.");
     }
