@@ -4,7 +4,7 @@
   "description": "An AI-powered tool for effortless document analysis. Seamlessly search through your documents with advanced AI technology.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
     "install-client": "cd client && npm install",
     "install-server": "cd server && npm install",
     "server": "npm start --prefix server",
