@@ -25,7 +25,7 @@ const generateNewChat = async (req, res) => {
 
 const getChat = async (req, res) => {
   try {
-    const chatExists = await Chat.findOne({ chatId: req.query.chatId });
+    const chatExists = await Chat.findOne({ chatId: req.body.chatId });
     if (chatExists) {
       const { data } = await openai.beta.threads.messages.list(
         chatExists.threadId,
@@ -45,7 +45,7 @@ const getChat = async (req, res) => {
 
 const getAllChats = async (req, res) => {
   try {
-    const chats = await Chat.find({ uid: req.query.uid });
+    const chats = await Chat.find({ uid: req.body.uid });
     res.status(200).json(chats);
   } catch (error) {
     res.status(400).send("An error has occured");

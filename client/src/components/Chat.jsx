@@ -55,12 +55,11 @@ export default function Chat() {
 
       const token = await currentUser.getIdToken();
       // Correctly passing parameters in a GET request
-      const response = await instance.get(`/api/chats/`, {
-        params: {
-          chatId: id,
-        },
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await instance.post(
+        `/api/chats/get-chat`,
+        { chatId: id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       // Directly using response.data without await
       setMessages(response.data);
     } catch (error) {
@@ -75,21 +74,19 @@ export default function Chat() {
   // Handles the submit event on form submit.
   const onSubmit = async (data) => {
     // if (!selectedFile) return; // Check if a file is selected
-   
+
     try {
       setLoading(true);
       setNewQuestion(data.text);
       const formData = new FormData();
       formData.append("file", selectedFile);
       formData.append("uid", currentUser.uid);
-      formData.append("chatId", id ? id : '');
+      formData.append("chatId", id ? id : "");
       formData.append("text", data.text);
       const token = await currentUser.getIdToken();
-      const response = await instance.post(
-        "/api/chats",
-        formData,
-        { headers: { Authorization: `Bearer ${token}`}}
-      );
+      const response = await instance.post("/api/chats", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const result = await response.data;
       setSelectedFile(null);
       setNewQuestion("");
@@ -117,9 +114,7 @@ export default function Chat() {
       setFileErrorMessage("");
     } else {
       setSelectedFile(null);
-      setFileErrorMessage(
-        "File must be .docx, .pdf, .json, .pptx, or .txt"
-      );
+      setFileErrorMessage("File must be .docx, .pdf, .json, .pptx, or .txt");
     }
   };
 
@@ -177,7 +172,7 @@ export default function Chat() {
                 {/* Chat input field and button section */}
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <InputGroup className="mb-1">
-                  <Form.Control
+                    <Form.Control
                       type="file"
                       ref={fileInputRef}
                       style={{ display: "none" }} // Hide the file input

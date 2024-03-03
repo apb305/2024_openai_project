@@ -9,9 +9,9 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const { currentUser } = useAuth();
 
-  useEffect(() => { 
+  useEffect(() => {
     getAllChatThreads();
-  } , []);
+  }, []);
 
   console.log(chatThreads);
 
@@ -19,19 +19,18 @@ export default function Dashboard() {
     try {
       setLoading(true);
       const token = await currentUser.getIdToken();
-      const response = await instance.get("/api/chats/all", {
-        params: {
-          uid: currentUser.uid,
-        },
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await instance.post(
+        "/api/chats/all",
+        { uid: currentUser.uid },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setChatThreads(response.data);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-   }
+  };
 
   return (
     <Container>

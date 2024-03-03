@@ -13,10 +13,10 @@ const upload = multer({ dest: 'uploads/' });
 
 router.post("/", ensureAuthenticated, upload.single('file'), generateNewChat);
 
-router.route("/")
-  .get(ensureAuthenticated, getChat)
+router.route("/get-chat")
+  .post(ensureAuthenticated, getChat)
   .delete(ensureAuthenticated, deleteChat);
 
-router.route("/all").get(ensureAuthenticated, getAllChats);
+router.route("/all").post(ensureAuthenticated, getAllChats);
 
 module.exports = router;

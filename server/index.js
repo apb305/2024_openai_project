@@ -22,7 +22,13 @@ app.use("/api/users", users);
 app.use("/api/chats", chats);
 
 // Serve Static assets for production
-
+// if (process.env.NODE_ENV === "production") {
+//   const __dirname = path.resolve(); 
+//   app.use(express.static(path.join(__dirname, "/client/dist")));
+//   app.get("/*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+//   });
+// }
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
