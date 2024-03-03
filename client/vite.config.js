@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       '/api': 'https://two024-openai-project-backend.onrender.com',
       ChangeOrigin: true,
-      Rewrite: (path) => path.replace(/^\/api/, ''),
+      rewrite: (path) => path.replace(/^\/api/, ''),
     },
   },
 })
