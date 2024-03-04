@@ -24,7 +24,7 @@ export default function ChatCards({ chatThreads, loading }) {
       ) : (
         <Row xs={1} md={4} className="g-2 mt-3">
           <Col>
-            <Card onClick={() => handleClick()} style={{ cursor: "pointer" }}>
+            <Card onClick={() => handleClick()} style={{ cursor: "pointer", minHeight: "125px" }} className="shadow-sm">
               {" "}
               {/* Add onClick and cursor style */}
               <Card.Body className="text-center">
@@ -38,11 +38,11 @@ export default function ChatCards({ chatThreads, loading }) {
               <Col key={index}>
                 <Card
                   onClick={() => handleClick(data.chatId)}
-                  style={{ cursor: "pointer", minHeight: "125px"}}
+                  style={{ cursor: "pointer", minHeight: "125px" }} className="shadow-sm"
                 >
                   <Card.Body className="text-end">
                     {/* <Card.Title className="text-start text-truncate">{data.chatTitle}</Card.Title> */}
-                    <Card.Subtitle className="mb-2 text-muted text-start text-break">
+                    <Card.Subtitle className="mb-2 text-muted text-start text-truncate">
                     {data.chatTitle}
                     </Card.Subtitle>
                     {/* <Card.Text className="text-start">

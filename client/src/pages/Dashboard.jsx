@@ -13,8 +13,6 @@ export default function Dashboard() {
     getAllChatThreads();
   }, []);
 
-  console.log(chatThreads);
-
   const getAllChatThreads = async () => {
     try {
       setLoading(true);
