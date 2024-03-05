@@ -25,7 +25,7 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
     purpose: "assistants",
   });
 
-  console.log(newfile.path);
+  // console.log(newfile.path);
 
   const assistant = await openai.beta.assistants.create({
     name: "File Analyzer Assistant",
