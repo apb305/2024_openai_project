@@ -40,6 +40,7 @@ export default function Chat() {
     "application/json",
     "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     "text/plain",
+    "text/html",
   ];
 
   useEffect(() => {
@@ -109,12 +110,13 @@ export default function Chat() {
 
   const handleFileChange = (e) => {
     let selected = e.target.files[0];
+    console.log(selected);
     if (selected && fileTypes.includes(selected.type)) {
       setSelectedFile(selected);
       setFileErrorMessage("");
     } else {
       setSelectedFile(null);
-      setFileErrorMessage("File must be .docx, .pdf, .json, .pptx, or .txt");
+      setFileErrorMessage("File must be .docx, .pdf, .json, .html, .pptx, or .txt");
     }
   };
 
