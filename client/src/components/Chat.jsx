@@ -185,19 +185,25 @@ export default function Chat() {
                 {/* Chat input field and button section */}
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <InputGroup className="mb-1">
-                    <Form.Control
-                      type="file"
-                      ref={fileInputRef}
-                      style={{ display: "none" }} // Hide the file input
-                      onChange={handleFileChange}
-                    />
-                    {/* Custom button that triggers the file input */}
-                    <Button
-                      onClick={handleButtonClick}
-                      style={{ backgroundColor: "rgb(25, 118, 210)" }}
-                    >
-                      <CgAttachment />
-                    </Button>
+                    {/* Only show the file button if 
+                      there are messages in the chat */}
+                    {messages.length === 0 && (
+                      <>
+                        <Form.Control
+                          type="file"
+                          ref={fileInputRef}
+                          style={{ display: "none" }} // Hide the file input
+                          onChange={handleFileChange}
+                        />
+                        {/* Custom button that triggers the file input */}
+                        <Button
+                          onClick={handleButtonClick}
+                          style={{ backgroundColor: "rgb(25, 118, 210)" }}
+                        >
+                          <CgAttachment />
+                        </Button>
+                      </>
+                    )}
                     <FormControl
                       id="messageInput"
                       type="text"
