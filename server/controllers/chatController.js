@@ -9,8 +9,11 @@ const openai = new OpenAI({
 });
 
 const generateNewChat = async (req, res) => {
+  if (req.file.size > 10000000) {
+    // File size can be 10MB or less
+    return res.status(400).send("File size too large");
+  }
   try {
-    console.log(req.file)
     const response = await getOpenAIResponse(
       req.body.text,
       req.body.chatId,
@@ -54,10 +57,17 @@ const getAllChats = async (req, res) => {
 
 const deleteChat = async (req, res) => {
   try {
-    const chatExists = await Chat.findOne({ uid: req.user.uid });
+    const chatExists = await Chat.findOne({ chatId: req.body.chatId }).where({
+      uid: req.body.uid,
+    });
+   
     if (chatExists) {
-      await openai.beta.threads.delete(chatExists.threadId);
-      await Chat.deleteOne({ uid: req.user.uid });
+      // Delete the assistant and file from OpenAI
+      await openai.files.del(chatExists.fileId);
+      // Delete the assistant from OpenAI
+      await openai.beta.assistants.del(chatExists.assistantId);
+      // Delete the chat data from the database
+      await Chat.deleteOne({ chatId: req.body.chatId });
     }
     res.status(200).send("Chat deleted");
   } catch (error) {

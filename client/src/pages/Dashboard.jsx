@@ -5,30 +5,7 @@ import ChatCards from "../components/ChatCards";
 import instance from "../config/axiosConfig";
 
 export default function Dashboard() {
-  const [chatThreads, setChatThreads] = useState([]);
-  const [loading, setLoading] = useState(false);
   const { currentUser } = useAuth();
-
-  useEffect(() => {
-    getAllChatThreads();
-  }, []);
-
-  const getAllChatThreads = async () => {
-    try {
-      setLoading(true);
-      const token = await currentUser.getIdToken();
-      const response = await instance.post(
-        "/api/chats/all",
-        { uid: currentUser.uid },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setChatThreads(response.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <Container>
@@ -37,7 +14,7 @@ export default function Dashboard() {
           <p className="mb-0">Welcome, {currentUser.displayName}</p>
         </div>
         {/* <Image src={currentUser.photoURL} roundedCircle /> */}
-        <ChatCards chatThreads={chatThreads} loading={loading} />
+        <ChatCards />
       </div>
     </Container>
   );

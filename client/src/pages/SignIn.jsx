@@ -128,7 +128,8 @@ export default function SignIn() {
               disabled={loading}
               className="w-100 mt-4"
               type="submit"
-              style={{ backgroundColor: "rgb(25, 118, 210)" }}
+              variant="dark"
+              // style={{ backgroundColor: "rgb(25, 118, 210)" }}
             >
               {loading ? "Please wait..." : "Sign In"}
             </Button>
@@ -149,10 +150,10 @@ export default function SignIn() {
             handleGoogleLogin={handleGoogleLogin}
             loading={loading}
           />
-          {/* <FacebookButton
+          <FacebookButton
             handleFacebookLogin={handleFacebookLogin}
             loading={loading}
-          /> */}
+          />
           {/* Site Terms */}
           <div className="text-center my-3 fst-italic fw-light">
             <p className="small ">

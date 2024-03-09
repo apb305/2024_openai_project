@@ -27,7 +27,11 @@ export const AuthProvider = ({ children }) => {
 
   async function signUp(name, email, password) {
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       await updateProfile(auth.currentUser, {
         displayName: name,
       });
@@ -85,26 +89,31 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // const facebookSignIn = async () => { 
-  //   try {
-  //     const provider = new FacebookAuthProvider();
-  //     const result = await signInWithPopup(auth, provider);
-  //     const credential = FacebookAuthProvider.credentialFromResult(result);
-  //     const token = credential.accessToken;
-  //     // const photoUrl = `${result.user.photoURL}?height=500&access_token=${token}`;
-  //     // axios.post("/signup", {
-  //     //   _id: result.user.uid,
-  //     //   name: result.user.displayName,
-  //     //   email: result.user.email,
-  //     // });
-  //     await updateProfile(auth.currentUser, {
-  //       displayName: result.user.displayName,
-  //       photoURL: result.user.photoURL,
-  //     });
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
+  const facebookSignIn = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const credential = FacebookAuthProvider.credentialFromResult(result);
+      const firebaseToken = await auth.currentUser.getIdToken();
+      const facebookOAuthToken = credential.accessToken;
+      const photoUrl = `${result.user.photoURL}?height=500&access_token=${facebookOAuthToken}`;
+      axios.post(
+        "/api/users",
+        {
+          uid: result.user.uid,
+          name: result.user.displayName,
+          email: result.user.email,
+        },
+        { headers: { Authorization: `Bearer ${firebaseToken}` } }
+      );
+      await updateProfile(auth.currentUser, {
+        displayName: result.user.displayName,
+        photoURL: photoUrl,
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
 
   //Account linking
   // async function linkAccount(providerName) {
@@ -132,7 +141,6 @@ export const AuthProvider = ({ children }) => {
   //   }
   // }
 
-
   const signOut = () => {
     return auth.signOut();
   };
@@ -148,13 +156,13 @@ export const AuthProvider = ({ children }) => {
   const value = {
     currentUser,
     googleSignIn,
-    // facebookSignIn,
+    facebookSignIn,
     signUp,
     signOut,
     signIn,
     // linkAccount,
     resetPasswordByEmail,
-    changePasswordInAccount
+    changePasswordInAccount,
   };
 
   return (

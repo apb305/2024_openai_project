@@ -4,8 +4,6 @@ import { Card, Form, Button, Alert, Container, Image } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
-import GoogleButton from "../components/GoogleButton";
-import FacebookButton from "../components/FacebookButton";
 
 export default function SignUp() {
   const { signUp, currentUser, googleSignIn, facebookSignIn } = useAuth();
@@ -29,30 +27,6 @@ export default function SignUp() {
     }
   };
 
-  const handleGoogleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      await googleSignIn();
-      navigate("/dashboard");
-    } catch (error) {
-      toast.error(error.code);
-      setLoading(false);
-    }
-  };
-
-  // const handleFacebookLogin = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     setLoading(true);
-  //     await facebookSignIn();
-  //     navigate("/dashboard");
-  //   } catch (error) {
-  //     toast.error(error.code);
-  //     setLoading(false);
-  //   }
-  // };
-
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -60,7 +34,7 @@ export default function SignUp() {
   return (
     <Container className="d-flex align-items-center justify-content-center">
       {/* {currentUser && <Navigate to="/" replace={true} />} */}
-      <Card className="shadow border-0 mt-1">
+      <Card className="shadow border-0 mt-5">
         <Card.Body>
           <div className="text-center">
             <Image
@@ -138,29 +112,6 @@ export default function SignUp() {
             </Button>
           </Form>
 
-          {/* Divider */}
-          <div className="row my-3">
-            <div className="col">
-              <hr />
-            </div>
-            <div className="col-auto mt-1">
-              <p className="d-inline">or</p>
-            </div>
-            <div className="col">
-              <hr />
-            </div>
-          </div>
-
-          {/* Google button */}
-          <GoogleButton
-            handleGoogleLogin={handleGoogleLogin}
-            loading={loading}
-          />
-          {/* Facebook button */}
-          {/* <FacebookButton
-            handleFacebookLogin={handleFacebookLogin}
-            loading={loading}
-          /> */}
           {/* Site Terms */}
           <div className="text-center my-3 fst-italic fw-light">
             <p className="small ">

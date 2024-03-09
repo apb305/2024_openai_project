@@ -7,7 +7,7 @@ export default function FacebookButton({handleFacebookLogin, loading}) {
     <>
       <Button
         disabled={loading}
-        className="w-100 mb-3 text-white shadow-sm"
+        className="w-100 mb-3 text-white shadow"
         type="submit"
         style={{border: "none", backgroundColor: "rgb(25, 118, 210)"}}
         onClick={handleFacebookLogin}

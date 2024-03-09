@@ -74,8 +74,18 @@ export default function Chat() {
 
   // Handles the submit event on form submit.
   const onSubmit = async (data) => {
-    // if (!selectedFile) return; // Check if a file is selected
-
+    if (!selectedFile) {
+      // Check if a file is selected
+      setFileErrorMessage("Please attach a file");
+      return;
+    }
+    if (selectedFile.size > 10000000) {
+      // Check if the file size is 10MB or less
+      setFileErrorMessage(
+        "File size too large. Please upload a file that is 10MB or less."
+      );
+      return;
+    }
     try {
       setLoading(true);
       setNewQuestion(data.text);
@@ -110,13 +120,14 @@ export default function Chat() {
 
   const handleFileChange = (e) => {
     let selected = e.target.files[0];
-    console.log(selected);
     if (selected && fileTypes.includes(selected.type)) {
       setSelectedFile(selected);
       setFileErrorMessage("");
     } else {
       setSelectedFile(null);
-      setFileErrorMessage("File must be .docx, .pdf, .json, .html, .pptx, or .txt");
+      setFileErrorMessage(
+        "File must be .docx, .pdf, .json, .html, .pptx, or .txt"
+      );
     }
   };
 
@@ -213,14 +224,12 @@ export default function Chat() {
               </Card.Footer>
             </Card>
             <div>
-              <Button
-                href="/dashboard"
-                variant="dark"
-                size="sm"
-                className="mb-5 mt-3 shadow"
+              <Link
+                to="/dashboard"
+                className="btn btn-dark btn-sm mb-5 mt-3 shadow"
               >
                 Back to Dashboard
-              </Button>
+              </Link>
             </div>
           </div>
         </Container>

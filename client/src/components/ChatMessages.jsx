@@ -70,7 +70,7 @@ export default function ChatMessages({
           <div className="d-flex align-items-center">
             <div className="flex-shrink-0">
               <Image
-              className="rounded-circle"
+                className="rounded-circle"
                 src={user.photoURL ? user.photoURL : "/avatar.png"}
                 alt={user.displayName}
                 width={40}
