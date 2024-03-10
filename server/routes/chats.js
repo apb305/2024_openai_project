@@ -15,7 +15,7 @@ router.post("/", ensureAuthenticated, upload.single("file"), generateResponse);
 
 router.route("/get-chat").post(ensureAuthenticated, getChat);
 
-router.route("/delete-chat/").delete(ensureAuthenticated, deleteChat);
+router.route("/delete-chat").delete(ensureAuthenticated, deleteChat);
 
 router.route("/all").post(ensureAuthenticated, getAllChats);
 
