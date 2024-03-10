@@ -47,7 +47,6 @@ export default function ChatCards() {
   };
 
   const deleteChat = async (chatId) => {
-    handleClose();
     const token = await currentUser.getIdToken();
     try {
       setLoading(true);
@@ -55,6 +54,7 @@ export default function ChatCards() {
         data: { chatId: chatId, uid: currentUser.uid },
         headers: { Authorization: `Bearer ${token}` },
       });
+      handleClose();
       getAllChats();
     } catch (error) {
       console.error(error);
