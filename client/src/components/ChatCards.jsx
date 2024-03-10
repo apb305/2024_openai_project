@@ -54,7 +54,7 @@ export default function ChatCards() {
         data: { chatId: chatId, uid: currentUser.uid },
         headers: { Authorization: `Bearer ${token}` },
       });
-      handleClose();
+      setShow(false);
       getAllChats();
     } catch (error) {
       console.error(error);
