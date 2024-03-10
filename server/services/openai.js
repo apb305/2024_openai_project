@@ -76,7 +76,7 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
 };
 
 const getOpenAIResponse = async (text, chatId, uid, newFile) => {
-  
+
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -87,24 +87,6 @@ const getOpenAIResponse = async (text, chatId, uid, newFile) => {
   if (threadExists) {
 
     const chatId = threadExists.chatId;
-
-    //Check if a new file was uploaded
-    // if (newFile) {
-    //   const fileStream = fs.createReadStream(newFile.path);
-    //   const file = await openai.files.create({
-    //     file: fileStream,
-    //     purpose: "assistants",
-    //   });
-
-    //   // Update the assistant with the new file
-    //   await openai.beta.assistants.files.create(threadExists.assistantId, { file_id: file.id });
-
-    //   //Close the file stream
-    //   fileStream.close();
-
-    //   //Delete the file
-    //   fs.unlinkSync(fileStream.path);
-    // }
 
     //Create a new message
     await openai.beta.threads.messages.create(threadExists.threadId, {
