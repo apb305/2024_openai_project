@@ -55,7 +55,6 @@ export default function ChatCards() {
         headers: { Authorization: `Bearer ${token}` },
       });
       getAllChats();
-      setShow(false);
     } catch (error) {
       console.error(error);
     } finally {
@@ -111,12 +110,12 @@ export default function ChatCards() {
                     <Button
                       variant="link"
                       className="text-danger text-decoration-none"
-                      onClick={handleShow}
+                      onClick={() => deleteChat(data.chatId)}
                     >
                       Delete Chat
                     </Button>
 
-                    <Modal
+                    {/* <Modal
                       show={show}
                       onHide={handleClose}
                       animation={true}
@@ -139,7 +138,7 @@ export default function ChatCards() {
                           Delete
                         </Button>
                       </Modal.Footer>
-                    </Modal>
+                    </Modal> */}
                   </Card.Footer>
                 </Card>
               </Col>
