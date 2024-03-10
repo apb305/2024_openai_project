@@ -31,12 +31,12 @@ export default function AppNav() {
         className="dropdown-menu dropdown-menu-right border rounded-0 shadow"
         aria-labelledby="navbarDropdownMenuLink"
       >
-        <a className="dropdown-item" href="/dashboard">
+        <Link className="dropdown-item" to="/dashboard">
           Dashboard
-        </a>
-        <a className="dropdown-item" href="/profile">
+        </Link>
+        {/* <a className="dropdown-item" href="/profile">
           Profile
-        </a>
+        </a> */}
         <Link className="dropdown-item" to="/account-settings">
           Account Settings
         </Link>

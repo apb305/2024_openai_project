@@ -14,6 +14,7 @@ import PrivateLayout from "./components/privateLayout/PrivateLayout";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 import Chat from "./components/Chat";
+import AccountSettings from "./pages/AccountSettings";
 
 function App() {
   return (
@@ -36,6 +37,14 @@ function App() {
                     <Dashboard />
                   </PrivateLayout>
                 }
+              />
+              <Route
+                path="/account-settings"
+                element={
+                  <PrivateLayout>
+                    <AccountSettings />
+                  </PrivateLayout>
+                } 
               />
               <Route
                 path="/chat"

@@ -58,8 +58,27 @@ export const AuthProvider = ({ children }) => {
     return sendPasswordResetEmail(auth, email);
   }
 
-  function changePasswordInAccount(password) {
-    return currentUser.updatePassword(password);
+  async function changePasswordInAccount(email, currentPassword, newPassword) {
+    const user = auth.currentUser;
+    const currentCredentials = EmailAuthProvider.credential(
+      email,
+      currentPassword
+    );
+    try {
+      const reauthenticated = reauthenticateWithCredential(
+        user,
+        currentCredentials
+      );
+      const updatedPassword = updatePassword(
+        (await reauthenticated).user,
+        newPassword
+      );
+      if (updatedPassword) {
+        toast.success("Your password has been updated");
+      }
+    } catch (error) {
+      toast.error("Could not update password");
+    }
   }
 
   const googleSignIn = async () => {

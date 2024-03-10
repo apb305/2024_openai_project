@@ -54,12 +54,12 @@ export default function ChatCards() {
         data: { chatId: chatId, uid: currentUser.uid },
         headers: { Authorization: `Bearer ${token}` },
       });
-      getAllChats();
       setShow(false);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
+      getAllChats();
     }
   };
 
