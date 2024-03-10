@@ -19,13 +19,13 @@ const waitForRunCompletion = async (openai, threadId, runId) => {
 
 const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
   const chatId = uuidv4();
+
   const fileStream = fs.createReadStream(newfile.path);
+
   const file = await openai.files.create({
     file: fileStream,
     purpose: "assistants",
   });
-
-  // console.log(newfile.path);
 
   const assistant = await openai.beta.assistants.create({
     name: "File Analyzer Assistant",
@@ -33,8 +33,9 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
       "You are a helpful assistance named Jake, and your job is to review the files that are uploaded and help provide answers to solutions. Rules: 1. Only use the provided context 2. Always ask if the users question was answered.",
     model: "gpt-4-1106-preview",
     tools: [{ type: "retrieval" }],
-    file_ids: [file.id],
   });
+
+  await openai.beta.assistants.files.create(assistant.id, { file_id: file.id });
 
   const thread = await openai.beta.threads.create();
 
@@ -60,6 +61,7 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
 
   //Close the file stream
   fileStream.close();
+
   //Delete the file
   fs.unlinkSync(fileStream.path);
 
@@ -73,23 +75,44 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
   return { data, chatId };
 };
 
-const getOpenAIResponse = async (text, chatId, uid, file) => {
+const getOpenAIResponse = async (text, chatId, uid, newFile) => {
+  
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  //Check for existing assistant thread
   const threadExists = await Chat.findOne({ chatId: chatId });
 
+  //Check for existing assistant thread
   if (threadExists) {
+
     const chatId = threadExists.chatId;
 
-    // If thread exists, continue the conversation
+    //Check if a new file was uploaded
+    // if (newFile) {
+    //   const fileStream = fs.createReadStream(newFile.path);
+    //   const file = await openai.files.create({
+    //     file: fileStream,
+    //     purpose: "assistants",
+    //   });
+
+    //   // Update the assistant with the new file
+    //   await openai.beta.assistants.files.create(threadExists.assistantId, { file_id: file.id });
+
+    //   //Close the file stream
+    //   fileStream.close();
+
+    //   //Delete the file
+    //   fs.unlinkSync(fileStream.path);
+    // }
+
+    //Create a new message
     await openai.beta.threads.messages.create(threadExists.threadId, {
       role: "user",
       content: text,
     });
 
+    //Create a new run
     const run = await openai.beta.threads.runs.create(threadExists.threadId, {
       assistant_id: threadExists.assistantId,
     });
@@ -103,7 +126,7 @@ const getOpenAIResponse = async (text, chatId, uid, file) => {
 
     return { data, chatId };
   } else {
-    return createThreadAndRunAssistant(openai, uid, text, file);
+    return createThreadAndRunAssistant(openai, uid, text, newFile);
   }
 };
 

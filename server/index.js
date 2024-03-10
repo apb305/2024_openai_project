@@ -20,7 +20,6 @@ app.use(cors());
 //Use routes
 app.use("/api/users", users);
 app.use("/api/chats", chats);
-app.get("/wake", (req, res) => res.send("API Running"));
 
 // Serve Static assets for production
 // if (process.env.NODE_ENV === "production") {

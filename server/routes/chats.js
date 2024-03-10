@@ -3,7 +3,7 @@ const router = express.Router();
 require("../models/chats");
 const {
   getChat,
-  generateNewChat,
+  generateResponse,
   deleteChat,
   getAllChats,
 } = require("../controllers/chatController");
@@ -11,7 +11,7 @@ const { ensureAuthenticated } = require("../middleware/auth");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-router.post("/", ensureAuthenticated, upload.single("file"), generateNewChat);
+router.post("/", ensureAuthenticated, upload.single("file"), generateResponse);
 
 router.route("/get-chat").post(ensureAuthenticated, getChat);
 

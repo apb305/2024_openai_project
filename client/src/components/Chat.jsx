@@ -74,12 +74,12 @@ export default function Chat() {
 
   // Handles the submit event on form submit.
   const onSubmit = async (data) => {
-    if (!selectedFile) {
-      // Check if a file is selected
-      setFileErrorMessage("Please attach a file");
-      return;
-    }
-    if (selectedFile.size > 10000000) {
+    // if (!selectedFile) {
+    //   // Check if a file is selected
+    //   setFileErrorMessage("Please attach a file");
+    //   return;
+    // }
+    if (selectedFile && selectedFile.size > 10000000) {
       // Check if the file size is 10MB or less
       setFileErrorMessage(
         "File size too large. Please upload a file that is 10MB or less."
@@ -104,11 +104,21 @@ export default function Chat() {
       setMessages(result.data);
       reset();
       setLoading(false);
+      // If there is no chatId, navigate to the chat with the new chatId
       if (!id) {
         navigate(`/chat/${result.chatId}`, { replace: true });
       }
     } catch (error) {
+      setNewQuestion("");
+
       setLoading(false);
+      if (
+        error.response.data ===
+        "File already attached. Create a new chat to attach a different file."
+      ) {
+        setFileErrorMessage("File already attached. Create a new chat to attach a different file.");
+        setSelectedFile(null);
+      }
       console.log(error);
     }
   };
@@ -185,25 +195,19 @@ export default function Chat() {
                 {/* Chat input field and button section */}
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <InputGroup className="mb-1">
-                    {/* Only show the file button if 
-                      there are messages in the chat */}
-                    {messages.length === 0 && (
-                      <>
-                        <Form.Control
-                          type="file"
-                          ref={fileInputRef}
-                          style={{ display: "none" }} // Hide the file input
-                          onChange={handleFileChange}
-                        />
-                        {/* Custom button that triggers the file input */}
-                        <Button
-                          onClick={handleButtonClick}
-                          style={{ backgroundColor: "rgb(25, 118, 210)" }}
-                        >
-                          <CgAttachment />
-                        </Button>
-                      </>
-                    )}
+                    <Form.Control
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: "none" }} // Hide the file input
+                      onChange={handleFileChange}
+                    />
+                    {/* Custom button that triggers the file input */}
+                    <Button
+                      onClick={handleButtonClick}
+                      style={{ backgroundColor: "rgb(25, 118, 210)" }}
+                    >
+                      <CgAttachment />
+                    </Button>
                     <FormControl
                       id="messageInput"
                       type="text"

@@ -3,17 +3,34 @@ const OpenAI = require("openai");
 const mongoose = require("mongoose");
 require("../models/chats");
 const Chat = mongoose.model("chats");
+const fs = require("fs");
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const generateNewChat = async (req, res) => {
-  if (req.file.size > 10000000) {
-    // File size can be 10MB or less
-    return res.status(400).send("File size too large");
-  }
+const generateResponse = async (req, res) => {
   try {
+    const fileExists = await Chat.findOne({ chatId: req.body.chatId });
+
+    // Check if file already exists
+    if (fileExists && req.file) {
+      //Delete the file
+      fs.unlinkSync(req.file.path);
+      return res
+        .status(400)
+        .send(
+          "File already attached. Create a new chat to attach a different file."
+        );
+    }
+
+    // Check file size (if file is present)
+    if (req.file && req.file.size > 10000000) {
+      // File size can be 10MB or less
+      return res.status(400).send("File size too large");
+    }
+
+    // If no file or file is acceptable, proceed with generating response
     const response = await getOpenAIResponse(
       req.body.text,
       req.body.chatId,
@@ -22,7 +39,8 @@ const generateNewChat = async (req, res) => {
     );
     res.status(200).json(response);
   } catch (error) {
-    res.status(400).send(error);
+    console.error(error);
+    res.status(400).send("An error has occurred.");
   }
 };
 
@@ -60,7 +78,7 @@ const deleteChat = async (req, res) => {
     const chatExists = await Chat.findOne({ chatId: req.body.chatId }).where({
       uid: req.body.uid,
     });
-   
+
     if (chatExists) {
       // Delete the assistant and file from OpenAI
       await openai.files.del(chatExists.fileId);
@@ -75,4 +93,4 @@ const deleteChat = async (req, res) => {
   }
 };
 
-module.exports = { generateNewChat, getChat, deleteChat, getAllChats };
+module.exports = { generateResponse, getChat, deleteChat, getAllChats };
