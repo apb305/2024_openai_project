@@ -47,14 +47,15 @@ export default function ChatCards() {
   };
 
   const deleteChat = async (chatId) => {
-    const token = await currentUser.getIdToken();
     try {
       setLoading(true);
+      const token = await currentUser.getIdToken();
       await instance.delete("/api/chats/delete-chat", {
         data: { chatId: chatId, uid: currentUser.uid },
         headers: { Authorization: `Bearer ${token}` },
       });
       getAllChats();
+      setShow(false);
     } catch (error) {
       console.error(error);
     } finally {
@@ -110,12 +111,12 @@ export default function ChatCards() {
                     <Button
                       variant="link"
                       className="text-danger text-decoration-none"
-                      onClick={() => deleteChat(data.chatId)}
+                      onClick={handleShow}
                     >
                       Delete Chat
                     </Button>
 
-                    {/* <Modal
+                    <Modal
                       show={show}
                       onHide={handleClose}
                       animation={true}
@@ -138,7 +139,7 @@ export default function ChatCards() {
                           Delete
                         </Button>
                       </Modal.Footer>
-                    </Modal> */}
+                    </Modal>
                   </Card.Footer>
                 </Card>
               </Col>
