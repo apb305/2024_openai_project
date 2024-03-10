@@ -87,7 +87,9 @@ const deleteChat = async (req, res) => {
       // Delete the chat data from the database
       await Chat.deleteOne({ chatId: req.body.chatId });
     }
-    res.status(200).send("Chat deleted");
+    const chats = await Chat.find({ uid: req.body.uid });
+    // res.status(200).send("Chat deleted");
+    res.status(200).json(chats);
   } catch (error) {
     res.status(400).send("An error has occured");
   }

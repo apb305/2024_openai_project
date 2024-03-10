@@ -50,16 +50,15 @@ export default function ChatCards() {
     try {
       setLoading(true);
       const token = await currentUser.getIdToken();
-      await instance.delete("/api/chats/delete-chat", {
+      const response = await instance.delete("/api/chats/delete-chat", {
         data: { chatId: chatId, uid: currentUser.uid },
         headers: { Authorization: `Bearer ${token}` },
       });
-      setShow(false);
+      setChats(response.data);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
-      getAllChats();
     }
   };
 
