@@ -6,9 +6,13 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   updateEmail,
+  updatePassword,
   FacebookAuthProvider,
+  EmailAuthProvider,
   sendPasswordResetEmail,
+  reauthenticateWithCredential,
   sendSignInLinkToEmail,
+  verifyBeforeUpdateEmail,
   // signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
@@ -57,6 +61,44 @@ export const AuthProvider = ({ children }) => {
   function resetPasswordByEmail(email) {
     return sendPasswordResetEmail(auth, email);
   }
+
+  const reauthenticateUser = async (currentPassword) => {
+    try {
+      const user = auth.currentUser;
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+
+      await reauthenticateWithCredential(user, credential);
+      console.log("User re-authenticated successfully.");
+      return true; // Re-authentication succeeded
+    } catch (error) {
+      console.error("Error re-authenticating user:", error);
+      return false; // Re-authentication failed
+    }
+  };
+
+  const updateUserEmail = async (newEmail) => {
+    try {
+      const user = auth.currentUser;
+      await verifyBeforeUpdateEmail(user, newEmail);
+      await updateEmail(user, newEmail);
+      toast.success("Email updated successfully.");
+    } catch (error) {
+      console.error("Error updating user email:", error);
+    }
+  };
+
+  const changeUserEmail = async (currentPassword, newEmail) => {
+    const reauthenticated = await reauthenticateUser(currentPassword);
+
+    if (reauthenticated) {
+      await updateUserEmail(newEmail);
+    } else {
+      console.log("Failed to re-authenticate. Email not updated.");
+    }
+  };
 
   async function changePasswordInAccount(email, currentPassword, newPassword) {
     const user = auth.currentUser;
@@ -179,6 +221,7 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signOut,
     signIn,
+    changeUserEmail,
     // linkAccount,
     resetPasswordByEmail,
     changePasswordInAccount,

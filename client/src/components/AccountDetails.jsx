@@ -1,15 +1,12 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { updateProfile } from "firebase/auth";
-import {
-  Form,
-  Button,
-  Accordion
-} from "react-bootstrap";
+import { Form, Button, Accordion, Card } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
-export default function AccountDetails () {
+export default function AccountDetails() {
   const [loading, setLoading] = useState(false);
   const { currentUser } = useAuth();
   const {
@@ -20,14 +17,13 @@ export default function AccountDetails () {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
+  const handleUpdateName = async (data) => {
     setLoading(true);
     try {
       await updateProfile(currentUser, {
         displayName: data.name,
-        email: data.email
       });
-      reset()
+      reset();
       setLoading(false);
       toast.success("Profile updated");
     } catch (error) {
@@ -38,53 +34,49 @@ export default function AccountDetails () {
   };
 
   return (
-    <>
-      <Accordion.Item eventKey="0">
-        <Accordion.Header>Account Details</Accordion.Header>
-        <Accordion.Body>
-          <p className="fw-bold mt-2">
-            Account Name:{" "}
-            <small className="fw-light">{currentUser.displayName}</small>
-          </p>
-         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className="mb-3">
+    <Card>
+      <Card.Body>
+      <Card.Title style={{ fontSize: 18 }}>
+          {" "}
+          Account Email:{" "}
+          <span style={{ fontSize: 15, fontWeight: "lighter" }}>
+            {" "}
+            {currentUser.email}
+          </span>
+        </Card.Title>
+        <Card.Title style={{ fontSize: 18, marginTop: 20 }}>
+          {" "}
+          Name:{" "}
+          <span style={{ fontSize: 15, fontWeight: "lighter" }}>
+            {" "}
+            {currentUser.displayName}
+          </span>
+        </Card.Title>
+        <Form onSubmit={handleSubmit(handleUpdateName)}>
+          <Form.Group className="my-3">
             <Form.Control
-               type="text"
-               name="name"
-               placeholder="Enter name"
-               {...register("name")}
+              type="text"
+              name="name"
+              placeholder="Enter name"
+              {...register("name")}
             />
-          </Form.Group>
-          <p className="fw-bold mt-2">
-            Display Email:{" "}
-            <small className="fw-light">{currentUser.email}</small>
-          </p>
-          <Form.Group className="mb-3">
-            <Form.Control
-             type="text"
-             name="email"
-             placeholder="Enter email"
-             {...register("email", {
-               pattern: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i,
-             })}
-            />
-             {errors.email && errors.email.type === "pattern" && (
-                  <p className="mt-1 text-danger">Email is not valid</p>
-                )}
           </Form.Group>
           <div className="mt-2">
-            {watch("name") || watch("email")?  <Button
-              size="sm"
-              className="w-100"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? "Please wait..." : "Save"}
-            </Button> : ""}
+            {watch("name") ? (
+              <Button
+                size="sm"
+                className="w-100"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? "Please wait..." : "Save"}
+              </Button>
+            ) : (
+              ""
+            )}
           </div>
-          </Form>
-        </Accordion.Body>
-      </Accordion.Item>
-    </>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 }

@@ -173,7 +173,7 @@ export default function Chat() {
                   <div className="my-2">
                     {" "}
                     <p className="d-inline">
-                      <strong>Selected file:</strong> {selectedFile.name} -
+                      <strong>File selected:</strong> {selectedFile.name} -
                     </p>{" "}
                     <span className="">
                       {" "}

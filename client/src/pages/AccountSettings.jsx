@@ -1,10 +1,10 @@
-import { Form, Container, Accordion } from "react-bootstrap";
-import AccountDetails from "../components/AccountDetails";
+import { Container } from "react-bootstrap";
 // import ProfileImageUpload from "../components/ProfileImageUpload";
-import AccountSecurity from "../components/AccountSecurity";
+import AccountPassword from "../components/UpdatePassword";
+import UpdateEmail from "../components/UpdateEmail";
+import AccountDetails from "../components/AccountDetails";
 
 export default function AccountSettings() {
- 
   return (
     <Container className="align-items-center justify-content-center mt-4">
       <div className="row">
@@ -12,10 +12,9 @@ export default function AccountSettings() {
           <h4 className="text-center mb-4">Account Settings</h4>
           {/* Profile Image upload */}
           {/* <ProfileImageUpload /> */}
-            <Accordion className="my-3">
-              <AccountDetails />
-              <AccountSecurity />
-            </Accordion>
+          <AccountDetails />
+          {/* <UpdateEmail /> */}
+          <AccountPassword />
           <div className="text-center mt-3">
             <a
               href="/dashboard"
