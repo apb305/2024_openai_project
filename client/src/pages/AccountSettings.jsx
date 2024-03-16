@@ -3,6 +3,7 @@ import { Container } from "react-bootstrap";
 import AccountPassword from "../components/UpdatePassword";
 import UpdateEmail from "../components/UpdateEmail";
 import AccountDetails from "../components/AccountDetails";
+import { Link } from "react-router-dom";
 
 export default function AccountSettings() {
   return (
@@ -16,12 +17,12 @@ export default function AccountSettings() {
           {/* <UpdateEmail /> */}
           <AccountPassword />
           <div className="text-center mt-3">
-            <a
-              href="/dashboard"
+            <Link
+              to="/dashboard"
               className="btn btn-sm text-decoration-none text-white btn-sm btn-dark border"
             >
               Back to dashboard
-            </a>
+            </Link>
           </div>
         </div>
       </div>

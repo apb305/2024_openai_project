@@ -13,7 +13,6 @@ export default function Dashboard() {
         <div className="d-flex justify-content-between align-items-center">
           <p className="mb-0">Welcome, {currentUser.displayName}</p>
         </div>
-        {/* <Image src={currentUser.photoURL} roundedCircle /> */}
         <ChatCards />
       </div>
     </Container>
