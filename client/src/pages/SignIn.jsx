@@ -1,5 +1,5 @@
-import { Card, Form, Button, Container, Image } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { Card, Form, Button, Container, Image, Alert } from "react-bootstrap";
+import { set, useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import GoogleButton from "../components/GoogleButton";
@@ -16,22 +16,32 @@ export default function SignIn() {
   } = useForm();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn, currentUser, googleSignIn, facebookSignIn } = useAuth();
+  const { signIn, currentUser, googleSignIn, facebookSignIn, sendMagicLink } = useAuth();
+  const [formMessage, setFormMessage ] = useState(null);
 
-  const handleEmailPasswordLogin = async (e) => {
-    e.preventDefault();
+  // const actionCodeSettings = {  
+  //   url: getAuthUrl(),
+  //   handleCodeInApp: true,
+  // }
+
+  // function getAuthUrl() {
+  //   const origin = window.location.origin;
+  //   const path = '/complete-signin';
+  //   return [origin, path].join('');
+  // }
+
+  const handleEmailPasswordLogin = async (data) => {
     try {
       setLoading(true);
-      const data = new FormData(e.currentTarget);
-      const formData = {
-        email: data.get("email"),
-        password: data.get("password"),
-      };
-      await signIn(formData.email, formData.password);
+      // await sendMagicLink(data.email, actionCodeSettings);
+      // window.localStorage.setItem("emailForSignIn", data.email);
+      // setFormMessage("Check your email for the magic link");
+      // setLoading(false);
+      await signIn(data.email, data.password);
       navigate("/dashboard");
     } catch (error) {
       console.log(error);
-      toast.error("Please check your credentials");
+      toast.error(error.code);
       setLoading(false);
     }
   };
@@ -78,13 +88,14 @@ export default function SignIn() {
             />
           </div>
           {/* <h4 className="text-center mb-4">FAQtual</h4> */}
-          <Form onSubmit={handleEmailPasswordLogin}>
-            {/* Email */}
+          <Form onSubmit={handleSubmit(handleEmailPasswordLogin)}>
+            {/* Email login */}
+            {formMessage && <Alert variant="success">{formMessage}</Alert>}
             <Form.Group id="email">
               <Form.Control
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder="example@email.com"
                 {...register("email", { required: true })}
               ></Form.Control>
               {errors.email && (

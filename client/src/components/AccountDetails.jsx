@@ -34,7 +34,7 @@ export default function AccountDetails() {
   };
 
   return (
-    <Card>
+    <Card className="shadow-sm">
       <Card.Body>
       <Card.Title style={{ fontSize: 18 }}>
           {" "}

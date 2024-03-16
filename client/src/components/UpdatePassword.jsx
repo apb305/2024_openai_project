@@ -40,7 +40,7 @@ export default function UpdatePassword() {
   };
 
   return (
-    <Card className="mt-3">
+    <Card className="shadow-sm mt-3">
       <Card.Body>
         <Card.Title style={{ fontSize: 18 }}> Change password </Card.Title>
         <Form onSubmit={handleSubmit(onSubmit)}>

@@ -3,8 +3,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
-// import Profile from "./pages/Profile";
-// import Account from "./pages/Account";
 import Home from "./pages/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -15,6 +13,7 @@ import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 import Chat from "./components/Chat";
 import AccountSettings from "./pages/AccountSettings";
+import CompleteSignIn from "./pages/CompleteSignIn";
 
 function App() {
   return (
@@ -25,10 +24,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signUp" element={<SignUp />} />
+            <Route path="/complete-signin" element={<CompleteSignIn />} />
             <Route path="/reset-password" element={<ForgotPassword />} />
-            {/* <Route path="/trip/:id" element={<PrivateRoute />}>
-              <Route path="/trip/:id" element={<Trip />} />
-            </Route> */}
             <Route element={<PrivateRoute />}>
               <Route
                 path="/dashboard"
@@ -62,8 +59,6 @@ function App() {
                   </PrivateLayout>
                 }
               />
-              {/* <Route path="/profile" element={<Profile />} />
-              <Route path="/account" element={<Account />} /> */}
             </Route>
           </Routes>
         </AuthProvider>

@@ -7,6 +7,8 @@ import {
   signInWithPopup,
   updateEmail,
   updatePassword,
+  sendEmailVerification,
+  signInWithEmailLink,
   FacebookAuthProvider,
   EmailAuthProvider,
   sendPasswordResetEmail,
@@ -36,6 +38,8 @@ export const AuthProvider = ({ children }) => {
         email,
         password
       );
+      // await sendEmailVerification(result.user);
+      // auth.signOut();
       await updateProfile(auth.currentUser, {
         displayName: name,
       });
@@ -62,43 +66,52 @@ export const AuthProvider = ({ children }) => {
     return sendPasswordResetEmail(auth, email);
   }
 
-  const reauthenticateUser = async (currentPassword) => {
-    try {
-      const user = auth.currentUser;
-      const credential = EmailAuthProvider.credential(
-        user.email,
-        currentPassword
-      );
-
-      await reauthenticateWithCredential(user, credential);
-      console.log("User re-authenticated successfully.");
-      return true; // Re-authentication succeeded
-    } catch (error) {
-      console.error("Error re-authenticating user:", error);
-      return false; // Re-authentication failed
-    }
+  //Magic link
+  const sendMagicLink = (email, actionCodeSettings) => {
+    return sendSignInLinkToEmail(auth, email, actionCodeSettings);
   };
 
-  const updateUserEmail = async (newEmail) => {
-    try {
-      const user = auth.currentUser;
-      await verifyBeforeUpdateEmail(user, newEmail);
-      await updateEmail(user, newEmail);
-      toast.success("Email updated successfully.");
-    } catch (error) {
-      console.error("Error updating user email:", error);
-    }
+  const completeSignIn = (email, windowLocation) => {
+    return signInWithEmailLink(auth, email, windowLocation);
   };
 
-  const changeUserEmail = async (currentPassword, newEmail) => {
-    const reauthenticated = await reauthenticateUser(currentPassword);
+  // const reauthenticateUser = async (currentPassword) => {
+  //   try {
+  //     const user = auth.currentUser;
+  //     const credential = EmailAuthProvider.credential(
+  //       user.email,
+  //       currentPassword
+  //     );
 
-    if (reauthenticated) {
-      await updateUserEmail(newEmail);
-    } else {
-      console.log("Failed to re-authenticate. Email not updated.");
-    }
-  };
+  //     await reauthenticateWithCredential(user, credential);
+  //     console.log("User re-authenticated successfully.");
+  //     return true; // Re-authentication succeeded
+  //   } catch (error) {
+  //     console.error("Error re-authenticating user:", error);
+  //     return false; // Re-authentication failed
+  //   }
+  // };
+
+  // const updateUserEmail = async (newEmail) => {
+  //   try {
+  //     const user = auth.currentUser;
+  //     await verifyBeforeUpdateEmail(user, newEmail);
+  //     await updateEmail(user, newEmail);
+  //     toast.success("Email updated successfully.");
+  //   } catch (error) {
+  //     console.error("Error updating user email:", error);
+  //   }
+  // };
+
+  // const changeUserEmail = async (currentPassword, newEmail) => {
+  //   const reauthenticated = await reauthenticateUser(currentPassword);
+
+  //   if (reauthenticated) {
+  //     await updateUserEmail(newEmail);
+  //   } else {
+  //     console.log("Failed to re-authenticate. Email not updated.");
+  //   }
+  // };
 
   async function changePasswordInAccount(email, currentPassword, newPassword) {
     const user = auth.currentUser;
@@ -221,7 +234,9 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signOut,
     signIn,
-    changeUserEmail,
+    sendMagicLink,
+    completeSignIn,
+    // changeUserEmail,
     // linkAccount,
     resetPasswordByEmail,
     changePasswordInAccount,
