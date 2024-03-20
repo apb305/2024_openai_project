@@ -25,7 +25,7 @@ const generateResponse = async (req, res) => {
     }
 
     // Check file size (if file is present)
-    if (req.file && req.file.size > 10000000) {
+    if (req.file && req.file.size > 20000000) {
       // File size can be 10MB or less
       return res.status(400).send("File size too large");
     }

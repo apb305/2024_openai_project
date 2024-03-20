@@ -79,10 +79,10 @@ export default function Chat() {
     //   setFileErrorMessage("Please attach a file");
     //   return;
     // }
-    if (selectedFile && selectedFile.size > 10000000) {
+    if (selectedFile && selectedFile.size > 20000000) {
       // Check if the file size is 10MB or less
       setFileErrorMessage(
-        "File size too large. Please upload a file that is 10MB or less."
+        "File size too large. Please upload a file that is 20MB or less."
       );
       return;
     }
@@ -101,6 +101,7 @@ export default function Chat() {
       const result = await response.data;
       setSelectedFile(null);
       setNewQuestion("");
+      setFileErrorMessage("");
       setMessages(result.data);
       reset();
       setLoading(false);
@@ -116,7 +117,9 @@ export default function Chat() {
         error.response.data ===
         "File already attached. Create a new chat to attach a different file."
       ) {
-        setFileErrorMessage("File already attached. Create a new chat to attach a different file.");
+        setFileErrorMessage(
+          "File already attached. Create a new chat to attach a different file."
+        );
         setSelectedFile(null);
       }
       console.log(error);

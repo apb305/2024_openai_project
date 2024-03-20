@@ -36,22 +36,14 @@ export default function AccountDetails() {
   return (
     <Card className="shadow-sm">
       <Card.Body>
-      <Card.Title style={{ fontSize: 18 }}>
-          {" "}
+        <div style={{ fontSize: 15 }}>
           Account Email:{" "}
-          <span style={{ fontSize: 15, fontWeight: "lighter" }}>
-            {" "}
-            {currentUser.email}
-          </span>
-        </Card.Title>
-        <Card.Title style={{ fontSize: 18, marginTop: 20 }}>
-          {" "}
+          <span style={{ fontWeight: 700 }}> {currentUser.email}</span>
+        </div>
+        <div style={{ marginTop: 20, fontSize: 15 }}>
           Name:{" "}
-          <span style={{ fontSize: 15, fontWeight: "lighter" }}>
-            {" "}
-            {currentUser.displayName}
-          </span>
-        </Card.Title>
+          <span style={{ fontWeight: 700 }}> {currentUser.displayName}</span>
+        </div>
         <Form onSubmit={handleSubmit(handleUpdateName)}>
           <Form.Group className="my-3">
             <Form.Control
