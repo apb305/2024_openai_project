@@ -1,21 +1,18 @@
-import { Button, Col, Modal, Row, Spinner } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Col, Row, Spinner } from "react-bootstrap";
 import { RiChatNewFill } from "react-icons/ri";
 import Card from "react-bootstrap/Card";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { useAuth } from "../context/AuthContext";
 import instance from "../config/axiosConfig";
-import { useEffect, useState } from "react";
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function ChatCards() {
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   useEffect(() => {
     getAllChats();
@@ -47,6 +44,13 @@ export default function ChatCards() {
   };
 
   const deleteChat = async (chatId) => {
+    // Prompt the user for confirmation
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this chat?"
+    );
+    if (!confirmDelete) {
+      return; // Exit function if user cancels
+    }
     try {
       setLoading(true);
       const token = await currentUser.getIdToken();
@@ -77,7 +81,6 @@ export default function ChatCards() {
               className="shadow-sm"
             >
               {" "}
-              {/* Add onClick and cursor style */}
               <Card.Body className="text-center">
                 <Card.Title>New Chat</Card.Title>
                 <RiChatNewFill size={50} className="mt-2" />
@@ -87,59 +90,29 @@ export default function ChatCards() {
           {chats &&
             chats.map((data, index) => (
               <Col key={index}>
-                <Card style={{ minHeight: "125px" }} className="shadow-sm">
+                <Card style={{ minHeight: "130px" }} className="shadow-sm">
+                  <Card.Header className="d-flex justify-content-between align-items-center border-0 bg-white">
+                    <small className="text-start">
+                      {" "}
+                      Created {format(new Date(data.createdAt), "MM-dd-yyyy")}
+                    </small>
+                    <Link onClick={() => deleteChat(data.chatId)}>
+                      <FaTrashAlt className="text-danger" />
+                    </Link>
+                  </Card.Header>
                   <Card.Body
                     className="text-end"
                     onClick={() => handleClick(data.chatId)}
                     style={{ cursor: "pointer" }}
                   >
-                    {/* <Card.Title className="text-start text-truncate">{data.chatTitle}</Card.Title> */}
-                    <Card.Subtitle className="mb-2 text-start text-truncate text-center">
-                      <small>{data.chatTitle}</small>
-                    </Card.Subtitle>
                     <Card.Text
-                      className="text-start text-muted text-center"
-                      style={{ fontSize: 13 }}
+                      className="text-start text-truncate"
+                      style={{ fontSize: 14 }}
                     >
-                      Created {format(new Date(data.createdAt), "MM-dd-yyyy")}
+                      <strong>File: </strong>{" "}
+                      <small className="text-muted">{data.chatTitle}</small>
                     </Card.Text>
-                    {/* <Card.Link href="#" className="text-decoration-none">View</Card.Link> */}
-                    {/* <Card.Link href="#" className="text-danger text-decoration-none">Delete</Card.Link> */}
                   </Card.Body>
-                  <Card.Footer className="text-muted bg-white border-0 text-center">
-                    <Button
-                      variant="link"
-                      className="text-danger text-decoration-none"
-                      onClick={handleShow}
-                    >
-                      Delete Chat
-                    </Button>
-
-                    <Modal
-                      show={show}
-                      onHide={handleClose}
-                      animation={true}
-                      centered={true}
-                    >
-                      <Modal.Header closeButton>
-                        <Modal.Title>Delete Chat</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        Are you sure you want to delete this chat?
-                      </Modal.Body>
-                      <Modal.Footer className="border-0">
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
-                        </Button>
-                        <Button
-                          variant="danger"
-                          onClick={() => deleteChat(data.chatId)}
-                        >
-                          Delete
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                  </Card.Footer>
                 </Card>
               </Col>
             ))}

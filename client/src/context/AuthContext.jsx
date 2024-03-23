@@ -182,7 +182,7 @@ export const AuthProvider = ({ children }) => {
       );
       await updateProfile(auth.currentUser, {
         displayName: result.user.displayName,
-        photoURL: photoUrl,
+        photoURL: auth.currentUser.photoURL ? auth.currentUser.photoURL : photoUrl,
       });
     } catch (error) {
       throw error;

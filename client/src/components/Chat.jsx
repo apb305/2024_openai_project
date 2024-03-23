@@ -15,7 +15,6 @@ import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import instance from "../config/axiosConfig";
 import { CgAttachment } from "react-icons/cg";
-import { IoCloseCircleOutline } from "react-icons/io5";
 
 export default function Chat() {
   const [isLoading, setLoading] = useState(false);
@@ -171,7 +170,7 @@ export default function Chat() {
                 messages={messages}
                 previousMessagesLoading={isMessagesLoading}
               />
-              <Card.Footer className="text-muted bg-light">
+              <Card.Footer className="text-muted bg-light border-0">
                 {selectedFile && (
                   <div className="my-2">
                     {" "}

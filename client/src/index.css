@@ -83,3 +83,7 @@ body {
     transform: translate(24px, 0);
   }
 }
+
+.dropdown-toggle::after {
+  display: none;
+}
