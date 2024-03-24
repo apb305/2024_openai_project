@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
-  const { currentUser } = useAuth();
+  const { userLoggedIn } = useAuth();
   return (
     <main>
       <div className="container text-center">
@@ -11,7 +11,7 @@ export default function Home() {
           analysis. Seamlessly search through your documents with advanced AI
           technology.
         </p>
-        {currentUser ? (
+        {userLoggedIn ? (
           <a className="btn btn-primary mt-2" href="/dashboard">
             Get Started
           </a>

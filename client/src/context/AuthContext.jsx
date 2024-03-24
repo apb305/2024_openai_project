@@ -15,6 +15,7 @@ import {
   reauthenticateWithCredential,
   sendSignInLinkToEmail,
   verifyBeforeUpdateEmail,
+  deleteUser,
   // signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
@@ -29,6 +30,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
 
   async function signUp(name, email, password) {
@@ -38,8 +40,6 @@ export const AuthProvider = ({ children }) => {
         email,
         password
       );
-      // await sendEmailVerification(result.user);
-      // auth.signOut();
       await updateProfile(auth.currentUser, {
         displayName: name,
       });
@@ -53,6 +53,9 @@ export const AuthProvider = ({ children }) => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      await sendEmailVerification(result.user);
+      auth.signOut();
+      toast.success(`A verification email has been sent to ${email}`);
     } catch (error) {
       throw error;
     }
@@ -221,8 +224,16 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-      setLoading(false);
+      if (user) {
+        setCurrentUser(user);
+        setUserLoggedIn(true);
+        setLoading(false);
+      } 
+      else {
+        setCurrentUser(null);
+        setUserLoggedIn(false);
+        setLoading(false);
+      }
     });
     return unsubscribe;
   }, []);
@@ -236,6 +247,7 @@ export const AuthProvider = ({ children }) => {
     signIn,
     sendMagicLink,
     completeSignIn,
+    userLoggedIn,
     // changeUserEmail,
     // linkAccount,
     resetPasswordByEmail,

@@ -1,5 +1,5 @@
 const { getOpenAIResponse } = require("../services/openai");
-const OpenAI = require("openai");
+const { OpenAI } = require("openai");
 const mongoose = require("mongoose");
 require("../models/chats");
 const Chat = mongoose.model("chats");

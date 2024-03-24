@@ -16,10 +16,11 @@ export default function SignIn() {
   } = useForm();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn, currentUser, googleSignIn, facebookSignIn, sendMagicLink } = useAuth();
-  const [formMessage, setFormMessage ] = useState(null);
+  const { signIn, currentUser, googleSignIn, facebookSignIn, sendMagicLink } =
+    useAuth();
+  const [formMessage, setFormMessage] = useState(null);
 
-  // const actionCodeSettings = {  
+  // const actionCodeSettings = {
   //   url: getAuthUrl(),
   //   handleCodeInApp: true,
   // }
@@ -161,10 +162,10 @@ export default function SignIn() {
             handleGoogleLogin={handleGoogleLogin}
             loading={loading}
           />
-          <FacebookButton
+          {/* <FacebookButton
             handleFacebookLogin={handleFacebookLogin}
             loading={loading}
-          />
+          /> */}
           {/* Site Terms */}
           <div className="text-center my-3 fst-italic fw-light">
             <p className="small ">
