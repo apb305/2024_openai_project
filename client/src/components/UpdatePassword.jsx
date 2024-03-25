@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Accordion, Card } from "react-bootstrap";
+import { Button, Form, Accordion, Card, CardHeader } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
@@ -41,8 +41,10 @@ export default function UpdatePassword() {
 
   return (
     <Card className="shadow-sm mt-3">
+      <CardHeader>
+      <Card.Title style={{ fontSize: 15, textAlign: "center" }}> Change password </Card.Title>
+      </CardHeader>
       <Card.Body>
-        <Card.Title style={{ fontSize: 25 }}> Change password </Card.Title>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="my-3">
             <Form.Control

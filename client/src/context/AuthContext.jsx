@@ -78,22 +78,23 @@ export const AuthProvider = ({ children }) => {
     return signInWithEmailLink(auth, email, windowLocation);
   };
 
-  // const reauthenticateUser = async (currentPassword) => {
-  //   try {
-  //     const user = auth.currentUser;
-  //     const credential = EmailAuthProvider.credential(
-  //       user.email,
-  //       currentPassword
-  //     );
+  const reauthenticateUser = async (currentPassword) => {
+    try {
+      const user = auth.currentUser;
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+      await reauthenticateWithCredential(user, credential);
+      console.log("User re-authenticated successfully.");
+      return true; // Re-authentication succeeded
+    } catch (error) {
+      console.error(error);
+      toast.error(error.code)
+      return false; // Re-authentication failed
+    }
+  };
 
-  //     await reauthenticateWithCredential(user, credential);
-  //     console.log("User re-authenticated successfully.");
-  //     return true; // Re-authentication succeeded
-  //   } catch (error) {
-  //     console.error("Error re-authenticating user:", error);
-  //     return false; // Re-authentication failed
-  //   }
-  // };
 
   // const updateUserEmail = async (newEmail) => {
   //   try {
@@ -222,6 +223,28 @@ export const AuthProvider = ({ children }) => {
     return auth.signOut();
   };
 
+  const deleteAccount = async (user, password) => { 
+    try {
+      const reauthenticated = await reauthenticateUser(password);
+      if (reauthenticated) {
+        const token = await user.getIdToken();
+        await axios.delete("/api/chats", {
+          data: { uid: user.uid },
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        await axios.delete("/api/users", {
+          data: { uid: user.uid },
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        await deleteUser(user);
+        await auth.signOut();
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.code);
+    }
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -248,6 +271,7 @@ export const AuthProvider = ({ children }) => {
     sendMagicLink,
     completeSignIn,
     userLoggedIn,
+    deleteAccount,
     // changeUserEmail,
     // linkAccount,
     resetPasswordByEmail,

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { updateProfile } from "firebase/auth";
-import { Form, Button, Accordion, Card } from "react-bootstrap";
+import { Form, Button, Card, CardHeader } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+
 
 export default function AccountDetails() {
   const [loading, setLoading] = useState(false);
@@ -35,6 +35,9 @@ export default function AccountDetails() {
 
   return (
     <Card className="shadow-sm">
+         <CardHeader>
+        <Card.Title style={{ fontSize: 15, textAlign: "center" }}> Profile </Card.Title>
+        </CardHeader>
       <Card.Body>
         <div style={{ fontSize: 15 }}>
           Account Email:{" "}

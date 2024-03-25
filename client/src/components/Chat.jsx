@@ -122,6 +122,7 @@ export default function Chat() {
         setSelectedFile(null);
       }
       console.log(error);
+      setFileErrorMessage(error.response.data)
     }
   };
 
@@ -217,7 +218,7 @@ export default function Chat() {
                       placeholder="Type message here..."
                       aria-label="User Message"
                       aria-describedby="button-addon2"
-                      {...register("text", { required: true })}
+                      {...register("text")}
                     />
                     <Button
                       style={{ backgroundColor: "rgb(25, 118, 210)" }}
@@ -227,11 +228,6 @@ export default function Chat() {
                       {isLoading ? "Processing..." : "Submit"}
                     </Button>
                   </InputGroup>
-                  {errors.text && (
-                    <Alert variant="danger" className="mt-2">
-                      This field is required!
-                    </Alert>
-                  )}
                 </Form>
               </Card.Footer>
             </Card>

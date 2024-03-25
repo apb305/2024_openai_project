@@ -43,4 +43,9 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { signIn, getUser, updateUser };
+const deleteUser = async (req, res) => {
+  await User.deleteOne({ _id: req.body.uid });
+  res.status(200).send("User deleted");
+}
+
+module.exports = { signIn, getUser, updateUser, deleteUser  };

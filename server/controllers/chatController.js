@@ -10,6 +10,10 @@ const openai = new OpenAI({
 });
 
 const generateResponse = async (req, res) => {
+  if (!req.body.text || !req.file) {
+    fs.unlinkSync(req.file.path);
+    return res.status(400).send("Text and file required.");
+  }
   try {
     const fileExists = await Chat.findOne({ chatId: req.body.chatId });
 
@@ -95,4 +99,30 @@ const deleteChat = async (req, res) => {
   }
 };
 
-module.exports = { generateResponse, getChat, deleteChat, getAllChats };
+const deleteAllChats = async (req, res) => {
+  try {
+    const chats = await Chat.find({ uid: req.body.uid });
+    if (chats.length > 0) {
+      for (let i = 0; i < chats.length; i++) {
+        const chat = chats[i];
+        // Delete the assistant and file from OpenAI
+        await openai.files.del(chat.fileId);
+        // Delete the assistant from OpenAI
+        await openai.beta.assistants.del(chat.assistantId);
+      }
+    }
+    // Delete the chat data from the database
+    await Chat.deleteMany({ uid: req.body.uid });
+    res.status(200).send("All chats deleted");
+  } catch (error) {
+    res.status(400).send("An error has occured");
+  }
+};
+
+module.exports = {
+  generateResponse,
+  getChat,
+  deleteChat,
+  getAllChats,
+  deleteAllChats,
+};
