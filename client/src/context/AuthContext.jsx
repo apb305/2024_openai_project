@@ -86,7 +86,6 @@ export const AuthProvider = ({ children }) => {
         currentPassword
       );
       await reauthenticateWithCredential(user, credential);
-      console.log("User re-authenticated successfully.");
       return true; // Re-authentication succeeded
     } catch (error) {
       console.error(error);
@@ -228,7 +227,7 @@ export const AuthProvider = ({ children }) => {
       const reauthenticated = await reauthenticateUser(password);
       if (reauthenticated) {
         const token = await user.getIdToken();
-        await axios.delete("/api/chats", {
+        await axios.delete("/api/chats/delete-all", {
           data: { uid: user.uid },
           headers: { Authorization: `Bearer ${token}` },
         });

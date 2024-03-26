@@ -19,7 +19,6 @@ export default function DeleteAccount() {
       const password = prompt(
         "Please enter your password to confirm account deletion"
       );
-      console.log(password);
       if (password === null) {
         return;
       }

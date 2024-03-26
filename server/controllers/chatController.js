@@ -10,8 +10,10 @@ const openai = new OpenAI({
 });
 
 const generateResponse = async (req, res) => {
-  if (!req.body.text || !req.file) {
-    fs.unlinkSync(req.file.path);
+  if (!req.body.text && !req.file) {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
     return res.status(400).send("Text and file required.");
   }
   try {

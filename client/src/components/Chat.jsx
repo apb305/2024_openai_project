@@ -15,6 +15,7 @@ import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import instance from "../config/axiosConfig";
 import { CgAttachment } from "react-icons/cg";
+import { toast } from "react-toastify";
 
 export default function Chat() {
   const [isLoading, setLoading] = useState(false);
@@ -64,20 +65,14 @@ export default function Chat() {
       setMessages(response.data);
     } catch (error) {
       console.error(error);
-      // Consider setting an error state here to display an error message to the user
+      toast.error("An error occurred while fetching messages");
     } finally {
-      // This will run regardless of the try/catch outcome
       setMessagesLoading(false);
     }
   };
 
   // Handles the submit event on form submit.
   const onSubmit = async (data) => {
-    // if (!selectedFile) {
-    //   // Check if a file is selected
-    //   setFileErrorMessage("Please attach a file");
-    //   return;
-    // }
     if (selectedFile && selectedFile.size > 20000000) {
       // Check if the file size is 10MB or less
       setFileErrorMessage(
