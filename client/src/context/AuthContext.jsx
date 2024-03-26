@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
       );
       await sendEmailVerification(result.user);
       auth.signOut();
-      toast.success(`A verification email has been sent to ${email}`);
+      toast.success(`A verification email has been sent to ${email}`, {position: "top-center"});
     } catch (error) {
       throw error;
     }

@@ -10,12 +10,9 @@ const openai = new OpenAI({
 });
 
 const generateResponse = async (req, res) => {
-  if (!req.body.text && !req.file) {
-    if (req.file) {
-      fs.unlinkSync(req.file.path);
-    }
-    return res.status(400).send("Text and file required.");
-  }
+  // if (!req.file) {
+  //   return res.status(400).send("File required.");
+  // }
   try {
     const fileExists = await Chat.findOne({ chatId: req.body.chatId });
 

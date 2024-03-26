@@ -59,7 +59,7 @@ export default function ChatMessages({
                   <FontAwesomeIcon size="2x" icon={faRobot} />
                 )}
               </div>
-              <div className="ms-3">{item.content[0].text.value}</div>
+              <div className="ms-3">{item.content[0]?.text.value || ""}</div>
             </div>
           </Card>
         ))}

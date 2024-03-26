@@ -162,10 +162,10 @@ export default function SignIn() {
             handleGoogleLogin={handleGoogleLogin}
             loading={loading}
           />
-          {/* <FacebookButton
+          <FacebookButton
             handleFacebookLogin={handleFacebookLogin}
             loading={loading}
-          /> */}
+          />
           {/* Site Terms */}
           <div className="text-center my-3 fst-italic fw-light">
             <p className="small ">
