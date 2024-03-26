@@ -73,8 +73,16 @@ export default function Chat() {
 
   // Handles the submit event on form submit.
   const onSubmit = async (data) => {
+    // if (!selectedFile) {
+    //   setFileErrorMessage("Please upload a file.");
+    //   return;
+    // }
+    if (!data.text) {
+      setFileErrorMessage("Please enter text.");
+      return;
+    }
+    // Check file size
     if (selectedFile && selectedFile.size > 20000000) {
-      // Check if the file size is 10MB or less
       setFileErrorMessage(
         "File size too large. Please upload a file that is 20MB or less."
       );
@@ -117,7 +125,7 @@ export default function Chat() {
         setSelectedFile(null);
       }
       console.log(error);
-      setFileErrorMessage(error.response.data)
+      setFileErrorMessage(error.response.data);
     }
   };
 

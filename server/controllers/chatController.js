@@ -10,26 +10,32 @@ const openai = new OpenAI({
 });
 
 const generateResponse = async (req, res) => {
-  // if (!req.file) {
-  //   return res.status(400).send("File required.");
-  // }
   try {
     const fileExists = await Chat.findOne({ chatId: req.body.chatId });
 
+    if (!fileExists && !req.file) {
+      return res.status(400).send("Please attach a file");
+    }
+
     // Check if file already exists
     if (fileExists && req.file) {
-      //Delete the file
+      // Delete the file
       fs.unlinkSync(req.file.path);
       return res
         .status(400)
         .send(
-          "File already attached. Create a new chat to attach a different file."
+          "A file is already attached to this chat. Please create a new chat to attach a new file."
         );
+    }
+
+    // Check if neither text nor file is provided
+    if (!req.body.text) {
+      return res.status(400).send("Please enter text");
     }
 
     // Check file size (if file is present)
     if (req.file && req.file.size > 20000000) {
-      // File size can be 10MB or less
+      // File size can be 20MB or less
       return res.status(400).send("File size too large");
     }
 
