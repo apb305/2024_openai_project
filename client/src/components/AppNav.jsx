@@ -1,19 +1,8 @@
 import React, { Fragment } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Link  } from "react-router-dom";
+import { auth } from "../config/firebase";
 
 export default function AppNav() {
-  const { signOut } = useAuth();
-  const navigate = useNavigate();
-
-  async function handleLogout() {
-    try {
-      await signOut();
-      navigate("/signin");
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   const authLinks = (
     <Fragment>
@@ -40,10 +29,10 @@ export default function AppNav() {
         <Link className="dropdown-item" to="/account-settings">
           Account Settings
         </Link>
-        <button className="dropdown-item" onClick={handleLogout}>
+        <Link className="dropdown-item btn" to="/signin" reloadDocument={true} onClick={() => auth.signOut()}>
           <i className="fas fa-sign-out-alt" />{" "}
           <span className="hide-sm">Logout</span>
-        </button>
+        </Link>
       </div>
     </Fragment>
   );
@@ -71,9 +60,7 @@ export default function AppNav() {
             id="navbarNavDropdown"
           >
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item dropdown ml-auto">
-                {authLinks}
-              </li>
+              <li className="nav-item dropdown ml-auto">{authLinks}</li>
             </ul>
           </div>
         </div>

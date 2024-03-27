@@ -218,10 +218,6 @@ export const AuthProvider = ({ children }) => {
   //   }
   // }
 
-  const signOut = () => {
-    return auth.signOut();
-  };
-
   const deleteAccount = async (user, password) => { 
     try {
       const reauthenticated = await reauthenticateUser(password);
@@ -265,7 +261,6 @@ export const AuthProvider = ({ children }) => {
     googleSignIn,
     facebookSignIn,
     signUp,
-    signOut,
     signIn,
     sendMagicLink,
     completeSignIn,
