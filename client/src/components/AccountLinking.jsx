@@ -26,7 +26,7 @@ export default function AccountLinking() {
         <Row className="justify-content-center">
           <Button
             variant="white"
-            className="w-50 mb-3 text-dark shadow"
+            className="w-75 mb-3 text-dark shadow"
             type="submit"
             style={{ border: "none" }}
             onClick={() => handleLinkAccount("google")}
@@ -38,7 +38,7 @@ export default function AccountLinking() {
         <Row className="justify-content-center">
           <Button
             variant="white"
-            className="w-50 mb-3 shadow text-white"
+            className="w-75 mb-3 shadow text-white"
             type="submit"
             style={{ border: "none", backgroundColor: "rgb(25, 118, 210)" }}
             onClick={() => handleLinkAccount("facebook")}
