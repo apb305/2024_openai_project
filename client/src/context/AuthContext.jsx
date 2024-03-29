@@ -16,6 +16,7 @@ import {
   sendSignInLinkToEmail,
   verifyBeforeUpdateEmail,
   deleteUser,
+  linkWithPopup
   // signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
@@ -55,7 +56,9 @@ export const AuthProvider = ({ children }) => {
       );
       await sendEmailVerification(result.user);
       auth.signOut();
-      toast.success(`A verification email has been sent to ${email}`, {position: "top-center"});
+      toast.success(`A verification email has been sent to ${email}`, {
+        position: "top-center",
+      });
     } catch (error) {
       throw error;
     }
@@ -89,30 +92,31 @@ export const AuthProvider = ({ children }) => {
       return true; // Re-authentication succeeded
     } catch (error) {
       console.error(error);
-      toast.error(error.code)
+      toast.error(error.code + ": " + error.message)
       return false; // Re-authentication failed
     }
   };
 
-
-  // const updateUserEmail = async (newEmail) => {
-  //   try {
-  //     const user = auth.currentUser;
-  //     await verifyBeforeUpdateEmail(user, newEmail);
-  //     await updateEmail(user, newEmail);
-  //     toast.success("Email updated successfully.");
-  //   } catch (error) {
-  //     console.error("Error updating user email:", error);
-  //   }
-  // };
+  const updateUserEmail = async (newEmail) => {
+    try {
+      const user = auth.currentUser;
+      await verifyBeforeUpdateEmail(user, newEmail);
+      toast.success("Please verify your new email address");
+      // await updateEmail(user, newEmail);
+      auth.signOut();
+    } catch (error) {
+      console.error("Error updating user email:", error);
+    }
+  };
 
   const changeUserEmail = async (currentPassword, newEmail) => {
-    const reauthenticated = await reauthenticateUser(currentPassword);
-
-    if (reauthenticated) {
-      await updateUserEmail(newEmail);
-    } else {
-      console.log("Failed to re-authenticate. Email not updated.");
+    try {
+      const reauthenticated = await reauthenticateUser(currentPassword);
+      if (reauthenticated) {
+        await updateUserEmail(newEmail);
+      } 
+    } catch (error) {
+      console.error("Error updating user email:", error);
     }
   };
 
@@ -185,7 +189,9 @@ export const AuthProvider = ({ children }) => {
       );
       await updateProfile(auth.currentUser, {
         displayName: result.user.displayName,
-        photoURL: auth.currentUser.photoURL ? auth.currentUser.photoURL : photoUrl,
+        photoURL: auth.currentUser.photoURL
+          ? auth.currentUser.photoURL
+          : photoUrl,
       });
     } catch (error) {
       throw error;
@@ -193,32 +199,33 @@ export const AuthProvider = ({ children }) => {
   };
 
   //Account linking
-  // async function linkAccount(providerName) {
-  //   if (!currentUser) {
-  //     console.error("No current user to link to.");
-  //     return;
-  //   }
+  async function linkAccount(providerName) {
+    if (!currentUser) {
+      console.error("No current user to link to.");
+      return;
+    }
 
-  //   try {
-  //     let provider;
-  //     if (providerName === 'google') {
-  //       provider = new GoogleAuthProvider();
-  //     } else if (providerName === 'facebook') {
-  //       provider = new FacebookAuthProvider();
-  //     } else {
-  //       throw new Error("Unsupported provider");
-  //     }
+    try {
+      let provider;
+      if (providerName === 'google') {
+        provider = new GoogleAuthProvider();
+      } else if (providerName === 'facebook') {
+        provider = new FacebookAuthProvider();
+      } else {
+        throw new Error("Unsupported provider");
+      }
 
-  //     const result = await linkWithPopup(currentUser, provider);
-  //     // Optionally, update the user's profile or handle the linked account information
-  //     console.log(`Account linked with ${providerName}`, result);
-  //   } catch (error) {
-  //     console.error(`Error linking ${providerName} account:`, error);
-  //     throw error;
-  //   }
-  // }
+      const result = await linkWithPopup(currentUser, provider);
+      // Optionally, update the user's profile or handle the linked account information
+      toast.success(`Account linked with ${providerName}`);
+      console.log(`Account linked with ${providerName}`, result);
+    } catch (error) {
+      console.error(`Error linking ${providerName} account:`, error);
+      throw error;
+    }
+  }
 
-  const deleteAccount = async (user, password) => { 
+  const deleteAccount = async (user, password) => {
     try {
       const reauthenticated = await reauthenticateUser(password);
       if (reauthenticated) {
@@ -238,7 +245,7 @@ export const AuthProvider = ({ children }) => {
       console.error(error);
       toast.error(error.code);
     }
-  }
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -246,8 +253,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
         setUserLoggedIn(true);
         setLoading(false);
-      } 
-      else {
+      } else {
         setCurrentUser(null);
         setUserLoggedIn(false);
         setLoading(false);
@@ -267,7 +273,7 @@ export const AuthProvider = ({ children }) => {
     userLoggedIn,
     deleteAccount,
     changeUserEmail,
-    // linkAccount,
+    linkAccount,
     resetPasswordByEmail,
     changePasswordInAccount,
   };

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { updateProfile } from "firebase/auth";
-import { Form, Button, Accordion, Card } from "react-bootstrap";
+import { Form, Button, Card, CardHeader } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
@@ -21,12 +20,8 @@ export default function UpdateEmail() {
   const handleUpdateEmail = async (data) => {
     try {
       setLoading(true);
-      console.log(data);
       await changeUserEmail(data.currentPassword, data.email);
-      reset();
       setLoading(false);
-      toast.success("Email updated");
-      setShowEmailInput(false);
     } catch (error) {
       setLoading(false);
       toast.error("An error has occured");
@@ -41,22 +36,21 @@ export default function UpdateEmail() {
 
   return (
     <Card className="mt-3">
+        <CardHeader>
+      <Card.Title style={{ fontSize: 15, textAlign: "center" }}> Change Email </Card.Title>
+      </CardHeader>
       <Card.Body>
-        <Card.Title style={{ fontSize: 18 }}>
-          {" "}
-          Email:{" "}
-          <span style={{ fontSize: 15, fontWeight: "lighter" }}>
-            {" "}
-            {currentUser.email}
-          </span>
-        </Card.Title>
+      <div style={{ fontSize: 15 }}>
+          Account Email:{" "}
+          <span style={{ fontWeight: 700 }}> {currentUser.email}</span>
+        </div>
         <Form onSubmit={handleSubmit(handleUpdateEmail)}>
           <Form.Group className="my-3">
             <Form.Control
               hidden={!showEmailInput}
               type="text"
               name="email"
-              placeholder="Enter email"
+              placeholder="New email"
               {...register("email", {
                 pattern: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i,
               })}
@@ -77,6 +71,7 @@ export default function UpdateEmail() {
               <p className="mt-1 text-danger">Current password is required</p>
             )}
           </Form.Group>
+          <Card.Text  hidden={!showEmailInput}> <small>Logout is required </small> </Card.Text>
           <div className="mt-2">
             {watch("email") ? (
               <Button
