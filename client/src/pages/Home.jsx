@@ -6,7 +6,7 @@ export default function Home() {
     <main>
       <div className="container text-center">
         <h1 className="mt-5 mb-3">FAQtual</h1>
-        <p className="lead">
+        <p>
           Welcome to FAQtual, your AI-powered tool for effortless document
           analysis. Seamlessly search through your documents with advanced AI
           technology.

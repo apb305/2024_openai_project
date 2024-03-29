@@ -106,15 +106,15 @@ export const AuthProvider = ({ children }) => {
   //   }
   // };
 
-  // const changeUserEmail = async (currentPassword, newEmail) => {
-  //   const reauthenticated = await reauthenticateUser(currentPassword);
+  const changeUserEmail = async (currentPassword, newEmail) => {
+    const reauthenticated = await reauthenticateUser(currentPassword);
 
-  //   if (reauthenticated) {
-  //     await updateUserEmail(newEmail);
-  //   } else {
-  //     console.log("Failed to re-authenticate. Email not updated.");
-  //   }
-  // };
+    if (reauthenticated) {
+      await updateUserEmail(newEmail);
+    } else {
+      console.log("Failed to re-authenticate. Email not updated.");
+    }
+  };
 
   async function changePasswordInAccount(email, currentPassword, newPassword) {
     const user = auth.currentUser;
@@ -266,7 +266,7 @@ export const AuthProvider = ({ children }) => {
     completeSignIn,
     userLoggedIn,
     deleteAccount,
-    // changeUserEmail,
+    changeUserEmail,
     // linkAccount,
     resetPasswordByEmail,
     changePasswordInAccount,
