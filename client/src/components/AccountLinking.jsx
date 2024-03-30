@@ -2,14 +2,30 @@ import { Button, Card, CardHeader, Row } from "react-bootstrap";
 import { FaSquareFacebook } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
 
 export default function AccountLinking() {
-  const { linkAccount } = useAuth();
+  const { currentUser, linkAccount, unlinkAccount } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const handleLinkAccount = async (provider) => {
     try {
+      setLoading(true);
       await linkAccount(provider);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  const handleUnlinkAccount = async (provider) => {
+    try {
+      setLoading(true);
+      await unlinkAccount(provider);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -22,17 +38,27 @@ export default function AccountLinking() {
         </Card.Title>
       </CardHeader>
       <Card.Body>
-        <h6 className="text-center">Link your account with social media</h6>
         <Row className="justify-content-center">
           <Button
             variant="white"
             className="w-75 mb-3 text-dark shadow"
             type="submit"
+            disabled={loading}
             style={{ border: "none" }}
-            onClick={() => handleLinkAccount("google")}
+            onClick={
+              currentUser.providerData.some(
+                (provider) => provider.providerId === "google.com"
+              )
+                ? () => handleUnlinkAccount("google")
+                : () => handleLinkAccount("google")
+            }
           >
-            <FcGoogle size="1.5em" style={{ marginRight: "10px" }} /> Link
-            Google Account
+            <FcGoogle size="1.5em" style={{ marginRight: "10px" }} />
+            {currentUser.providerData.some(
+              (provider) => provider.providerId === "google.com"
+            )
+              ? " Unlink Google Account"
+              : " Link Google Account"}
           </Button>
         </Row>
         <Row className="justify-content-center">
@@ -40,11 +66,22 @@ export default function AccountLinking() {
             variant="white"
             className="w-75 mb-3 shadow text-white"
             type="submit"
+            disabled={loading}
             style={{ border: "none", backgroundColor: "rgb(25, 118, 210)" }}
-            onClick={() => handleLinkAccount("facebook")}
+            onClick={
+              currentUser.providerData.some(
+                (provider) => provider.providerId === "facebook.com"
+              )
+                ? () => handleUnlinkAccount("facebook")
+                : () => handleLinkAccount("facebook")
+            }
           >
             <FaSquareFacebook size="1.5em" style={{ marginRight: "10px" }} />{" "}
-            Link Facebook Account
+            {currentUser.providerData.some(
+              (provider) => provider.providerId === "facebook.com"
+            )
+              ? "Unlink Facebook Account"
+              : "Link Facebook Account"}
           </Button>
         </Row>
       </Card.Body>

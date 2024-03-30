@@ -5,7 +5,6 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
-  updateEmail,
   updatePassword,
   sendEmailVerification,
   signInWithEmailLink,
@@ -16,8 +15,8 @@ import {
   sendSignInLinkToEmail,
   verifyBeforeUpdateEmail,
   deleteUser,
-  linkWithPopup
-  // signInWithRedirect,
+  linkWithPopup,
+  unlink,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
 import axios from "../config/axiosConfig";
@@ -73,13 +72,13 @@ export const AuthProvider = ({ children }) => {
   }
 
   //Magic link
-  const sendMagicLink = (email, actionCodeSettings) => {
-    return sendSignInLinkToEmail(auth, email, actionCodeSettings);
-  };
+  // const sendMagicLink = (email, actionCodeSettings) => {
+  //   return sendSignInLinkToEmail(auth, email, actionCodeSettings);
+  // };
 
-  const completeSignIn = (email, windowLocation) => {
-    return signInWithEmailLink(auth, email, windowLocation);
-  };
+  // const completeSignIn = (email, windowLocation) => {
+  //   return signInWithEmailLink(auth, email, windowLocation);
+  // };
 
   const reauthenticateUser = async (currentPassword) => {
     try {
@@ -102,7 +101,6 @@ export const AuthProvider = ({ children }) => {
       const user = auth.currentUser;
       await verifyBeforeUpdateEmail(user, newEmail);
       toast.success("Please verify your new email address");
-      // await updateEmail(user, newEmail);
       auth.signOut();
     } catch (error) {
       console.error("Error updating user email:", error);
@@ -199,7 +197,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   //Account linking
-  async function linkAccount(providerName) {
+  const linkAccount = async (providerName) => {
     if (!currentUser) {
       console.error("No current user to link to.");
       return;
@@ -221,9 +219,34 @@ export const AuthProvider = ({ children }) => {
       console.log(`Account linked with ${providerName}`, result);
     } catch (error) {
       console.error(`Error linking ${providerName} account:`, error);
-      throw error;
+      toast.error(error.code);
     }
   }
+
+const unlinkAccount = async (providerName) => {
+  if (!currentUser) {
+    console.error("No current user to unlink from.");
+    return;
+  }
+
+  try {
+    let provider;
+      if (providerName === 'google') {
+        provider = new GoogleAuthProvider();
+      } else if (providerName === 'facebook') {
+        provider = new FacebookAuthProvider();
+      } else {
+        throw new Error("Unsupported provider");
+      }
+    await unlink(currentUser, provider.providerId);
+    toast.success(`Account unlinked from ${providerName}`);
+    console.log(`Account unlinked from ${providerName}`);
+  }
+  catch (error) {
+    console.error(`Error unlinking account from ${providerName}:`, error);
+    toast.error(error.code);
+  }
+}
 
   const deleteAccount = async (user, password) => {
     try {
@@ -268,12 +291,13 @@ export const AuthProvider = ({ children }) => {
     facebookSignIn,
     signUp,
     signIn,
-    sendMagicLink,
-    completeSignIn,
+    // sendMagicLink,
+    // completeSignIn,
     userLoggedIn,
     deleteAccount,
     changeUserEmail,
     linkAccount,
+    unlinkAccount,
     resetPasswordByEmail,
     changePasswordInAccount,
   };
