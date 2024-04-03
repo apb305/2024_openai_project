@@ -1,7 +1,6 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRobot } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef } from "react";
-import { Card, Image, Spinner } from "react-bootstrap";
+import { Card, Image } from "react-bootstrap";
+import { FaRobot } from "react-icons/fa6";
 
 export default function ChatMessages({
   isLoading,
@@ -28,7 +27,7 @@ export default function ChatMessages({
         <Card className="bg-light p-2 mt-2 rounded border-0 shadow-sm">
           <div className="d-flex align-items-center">
             <div className="flex-shrink-0">
-              <FontAwesomeIcon size="2x" icon={faRobot} />
+              <FaRobot size={40} />
             </div>
             <div className="ms-3">
               Hi, I am Jake, your friendly assistant. Feel free to ask me
@@ -56,7 +55,7 @@ export default function ChatMessages({
                     height={40}
                   />
                 ) : (
-                  <FontAwesomeIcon size="2x" icon={faRobot} />
+                  <FaRobot size={40} />
                 )}
               </div>
               <div className="ms-3">{item.content[0]?.text.value || ""}</div>
@@ -88,7 +87,7 @@ loader while waiting for response */}
         <Card className="bg-light p-2 mt-2 rounded border-0 shadow-sm">
           <div className="d-flex align-items-center">
             <div className="flex-shrink-0">
-              <FontAwesomeIcon size="2x" icon={faRobot} />
+              <FaRobot size={40} />
             </div>
             <div className="lds-ellipsis ms-2">
               <div></div>

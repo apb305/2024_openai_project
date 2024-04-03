@@ -15,6 +15,7 @@ import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import instance from "../config/axiosConfig";
 import { CgAttachment } from "react-icons/cg";
+import { IoMdArrowBack } from "react-icons/io";
 import { toast } from "react-toastify";
 
 export default function Chat() {
@@ -156,12 +157,17 @@ export default function Chat() {
     <>
       <main>
         <Container className="justify-content-center">
-          <div className="mt-5">
+          {/* <div className="mt-5">
             {currentUser && (
               <div className="mt-2">
                 <p className="mx-2">Welcome, {currentUser.displayName}</p>{" "}
               </div>
             )}
+          </div> */}
+          <div className="my-3">
+            <Link to="/dashboard" className="text-dark text-decoration-none">
+             <span><IoMdArrowBack size={25} /></span> Back to Dashboard
+            </Link>
           </div>
           <div className="mt-3">
             {/* Chat Card */}
@@ -234,14 +240,6 @@ export default function Chat() {
                 </Form>
               </Card.Footer>
             </Card>
-            <div>
-              <Link
-                to="/dashboard"
-                className="btn btn-dark btn-sm mb-5 mt-3 shadow"
-              >
-                Back to Dashboard
-              </Link>
-            </div>
           </div>
         </Container>
       </main>

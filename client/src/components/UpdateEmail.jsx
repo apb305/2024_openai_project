@@ -37,7 +37,7 @@ export default function UpdateEmail() {
   return (
     <Card className="mt-3">
         <CardHeader>
-      <Card.Title style={{ fontSize: 15, textAlign: "center" }}> Change Email </Card.Title>
+      <Card.Title style={{ fontSize: 15, textAlign: "center" }}> Account Email </Card.Title>
       </CardHeader>
       <Card.Body>
       <div style={{ fontSize: 15 }}>

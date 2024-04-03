@@ -4,10 +4,11 @@ import { updateProfile } from "firebase/auth";
 import { Form, Button, Card, CardHeader } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
-
+import { Link } from "react-router-dom";
 
 export default function AccountDetails() {
   const [loading, setLoading] = useState(false);
+  const [showNameInput, setShowNameInput] = useState(false);
   const { currentUser } = useAuth();
   const {
     register,
@@ -25,7 +26,7 @@ export default function AccountDetails() {
       });
       reset();
       setLoading(false);
-      toast.success("Profile updated");
+      toast.success("Name updated");
     } catch (error) {
       setLoading(false);
       toast.error("An error has occured");
@@ -33,23 +34,32 @@ export default function AccountDetails() {
     }
   };
 
+  const toggleShowNameInput = () => {
+    reset();
+    setShowNameInput(!showNameInput);
+  };
+
   return (
     <Card className="shadow-sm">
-         <CardHeader>
-        <Card.Title style={{ fontSize: 15, textAlign: "center" }}> Profile </Card.Title>
-        </CardHeader>
+      <CardHeader>
+        <Card.Title style={{ fontSize: 15, textAlign: "center" }}>
+          {" "}
+          Account Name{" "}
+        </Card.Title>
+      </CardHeader>
       <Card.Body>
-        <div style={{ fontSize: 15 }}>
+        {/* <div style={{ fontSize: 15 }}>
           Account Email:{" "}
           <span style={{ fontWeight: 700 }}> {currentUser.email}</span>
-        </div>
-        <div style={{ marginTop: 20, fontSize: 15 }}>
+        </div> */}
+        <div style={{ fontSize: 15 }}>
           Name:{" "}
           <span style={{ fontWeight: 700 }}> {currentUser.displayName}</span>
         </div>
         <Form onSubmit={handleSubmit(handleUpdateName)}>
           <Form.Group className="my-3">
             <Form.Control
+              hidden={!showNameInput}
               type="text"
               name="name"
               placeholder="Enter name"
@@ -69,6 +79,23 @@ export default function AccountDetails() {
             ) : (
               ""
             )}
+          </div>
+          <div className="mt-2">
+            <Link
+              className="text-decoration-none text-primary"
+              onClick={toggleShowNameInput}
+              hidden={showNameInput}
+            >
+              Change Name
+            </Link>
+            <Link
+              className="text-decoration-none text-primary"
+              variant="link"
+              onClick={toggleShowNameInput}
+              hidden={!showNameInput}
+            >
+              Cancel
+            </Link>
           </div>
         </Form>
       </Card.Body>
