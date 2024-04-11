@@ -16,6 +16,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import instance from "../config/axiosConfig";
 import { CgAttachment } from "react-icons/cg";
 import { IoMdArrowBack } from "react-icons/io";
+import { BsSendFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 
 export default function Chat() {
@@ -234,7 +235,7 @@ export default function Chat() {
                       type="submit"
                       disabled={isLoading}
                     >
-                      {isLoading ? "Processing..." : "Submit"}
+                      {isLoading ? "Processing..." : <BsSendFill />}
                     </Button>
                   </InputGroup>
                 </Form>

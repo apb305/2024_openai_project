@@ -29,6 +29,7 @@ export default function ChatMessages({
             <div className="flex-shrink-0">
               <FaRobot size={40} />
             </div>
+            {/* Static AI introduction message */}
             <div className="ms-3">
               Hi, I am Jake, your friendly assistant. Feel free to ask me
               anything about your documents!
