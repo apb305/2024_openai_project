@@ -54,6 +54,7 @@ export default function ChatMessages({
                     alt={user.displayName}
                     width={40}
                     height={40}
+                    referrerPolicy="no-referrer"
                   />
                 ) : (
                   <FaRobot size={40} />
@@ -75,6 +76,7 @@ export default function ChatMessages({
                 alt={user.displayName}
                 width={40}
                 height={40}
+                referrerPolicy="no-referrer"
               />
             </div>
             <div className="ms-3">{newQuestion}</div>
