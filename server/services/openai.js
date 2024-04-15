@@ -28,14 +28,13 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
   });
 
   const assistant = await openai.beta.assistants.create({
-    name: "File Analyzer Assistant",
     instructions:
-      "You are a helpful assistance named Jake, and your job is to review the files that are uploaded and help provide answers to solutions. Rules: 1. Only use the provided context 2. Always ask if the users question was answered.",
-    model: "gpt-4-1106-preview",
+      "You are a helpful assistance named Jake, and your job is to review the files that are uploaded and help provide answers to solutions. Rules: 1. Only use the provided context.",
+    name: "File Analyzer Assistant",
+    model: "gpt-4-turbo",
     tools: [{ type: "retrieval" }],
+    file_ids: [file.id],
   });
-
-  await openai.beta.assistants.files.create(assistant.id, { file_id: file.id });
 
   const thread = await openai.beta.threads.create();
 
@@ -59,9 +58,6 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
     fileId: file.id,
   });
 
-  //Close the file stream
-  fileStream.close();
-
   //Delete the file
   fs.unlinkSync(fileStream.path);
 
@@ -76,7 +72,6 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
 };
 
 const getOpenAIResponse = async (text, chatId, uid, newFile) => {
-
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -85,7 +80,6 @@ const getOpenAIResponse = async (text, chatId, uid, newFile) => {
 
   //Check for existing assistant thread
   if (threadExists) {
-
     const chatId = threadExists.chatId;
 
     //Create a new message

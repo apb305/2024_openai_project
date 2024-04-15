@@ -49,7 +49,7 @@ const generateResponse = async (req, res) => {
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
-    res.status(400).send("An error has occurred.");
+    res.status(400).send(error.error);
   }
 };
 
