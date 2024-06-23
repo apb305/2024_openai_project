@@ -31,10 +31,10 @@ https://github.com/apb305/2024_openai_project/assets/25408995/6e5ef1bf-e30d-4d50
 
 Create a .env file in the server folder and add your credentials as follows:
 
-## Mongo
+#### Mongo
 ATLAS_URI= 
 
-## Firebase Admin SDK
+#### Firebase Admin SDK
 FIREBASE_PROJECT_ID=
 FIREBASE_PRIVATE_KEY_ID=
 FIREBASE_PRIVATE_KEY=
@@ -46,6 +46,6 @@ FIREBASE_AUTH_CERT_URL=
 FIREBASE_CLIENT_CERT_URL=
 FIREBASE_UNIVERSE_DOMAIN=
 
-## OpenAI
+#### OpenAI
 OPENAI_API_KEY=
 
