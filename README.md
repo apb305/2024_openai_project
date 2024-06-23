@@ -1,7 +1,6 @@
 # AI Document Chatbot
 
 A simple AI chatbot app that enables you to chat with your documents through an easy-to-use interface.  For authentication, the app uses Firebase's Email AuthProvider, as well as Google and Facebook OAuth providers.
-A full-stack e-commerce site created using the MERN stack technologies. This app was deployed on Render.com (front-end/back-end). Here is a [DEMO](https://mern-ecommerce-app-client.onrender.com/) of the project.
 
 ### Demo
 
