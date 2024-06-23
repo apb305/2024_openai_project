@@ -48,10 +48,6 @@ export default function AccountDetails() {
         </Card.Title>
       </CardHeader>
       <Card.Body>
-        {/* <div style={{ fontSize: 15 }}>
-          Account Email:{" "}
-          <span style={{ fontWeight: 700 }}> {currentUser.email}</span>
-        </div> */}
         <div style={{ fontSize: 15 }}>
           Name:{" "}
           <span style={{ fontWeight: 700 }}> {currentUser.displayName}</span>

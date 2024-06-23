@@ -1,5 +1,4 @@
 import { Container } from "react-bootstrap";
-// import ProfileImageUpload from "../components/ProfileImageUpload";
 import AccountPassword from "../components/UpdatePassword";
 import UpdateEmail from "../components/UpdateEmail";
 import AccountLinking from "../components/AccountLinking";
@@ -17,8 +16,6 @@ export default function AccountSettings() {
       <div className="row">
         <div className="col-md-8 mx-auto">
           <h4 className="text-center mb-4">Account Settings</h4>
-          {/* Profile Image upload */}
-          {/* <ProfileImageUpload /> */}
           <div className="my-3">
             <Link to="/dashboard" className="text-dark text-decoration-none">
               <span>

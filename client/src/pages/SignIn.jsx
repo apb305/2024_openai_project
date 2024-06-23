@@ -1,5 +1,5 @@
 import { Card, Form, Button, Container, Image, Alert } from "react-bootstrap";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import GoogleButton from "../components/GoogleButton";
@@ -16,28 +16,13 @@ export default function SignIn() {
   } = useForm();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn, currentUser, googleSignIn, facebookSignIn, sendMagicLink } =
+  const { signIn, googleSignIn, facebookSignIn, sendMagicLink } =
     useAuth();
   const [formMessage, setFormMessage] = useState(null);
-
-  // const actionCodeSettings = {
-  //   url: getAuthUrl(),
-  //   handleCodeInApp: true,
-  // }
-
-  // function getAuthUrl() {
-  //   const origin = window.location.origin;
-  //   const path = '/complete-signin';
-  //   return [origin, path].join('');
-  // }
 
   const handleEmailPasswordLogin = async (data) => {
     try {
       setLoading(true);
-      // await sendMagicLink(data.email, actionCodeSettings);
-      // window.localStorage.setItem("emailForSignIn", data.email);
-      // setFormMessage("Check your email for the magic link");
-      // setLoading(false);
       await signIn(data.email, data.password);
       navigate("/dashboard");
     } catch (error) {
@@ -77,7 +62,6 @@ export default function SignIn() {
 
   return (
     <Container className="d-flex align-items-center justify-content-center">
-      {/* {currentUser && <Navigate to="/" replace={true} />} */}
       <Card className="shadow border-0 mt-5 bg-white">
         <Card.Body>
           <div className="text-center">
@@ -88,7 +72,6 @@ export default function SignIn() {
               width={150}
             />
           </div>
-          {/* <h4 className="text-center mb-4">FAQtual</h4> */}
           <Form onSubmit={handleSubmit(handleEmailPasswordLogin)}>
             {/* Email login */}
             {formMessage && <Alert variant="success">{formMessage}</Alert>}
@@ -141,7 +124,6 @@ export default function SignIn() {
               className="w-100 mt-4"
               type="submit"
               variant="dark"
-              // style={{ backgroundColor: "rgb(25, 118, 210)" }}
             >
               {loading ? "Please wait..." : "Sign In"}
             </Button>
@@ -180,9 +162,6 @@ export default function SignIn() {
               .
             </p>
           </div>
-          {/* <div className="mt-3">
-              <hr></hr>
-            </div> */}
           <div className="text-center mt-4">
             <span>Need an account?</span>{" "}
             <Link

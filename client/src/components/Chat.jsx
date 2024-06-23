@@ -75,10 +75,7 @@ export default function Chat() {
 
   // Handles the submit event on form submit.
   const onSubmit = async (data) => {
-    // if (!selectedFile) {
-    //   setFileErrorMessage("Please upload a file.");
-    //   return;
-    // }
+    // Check if text is empty
     if (!data.text) {
       setFileErrorMessage("Please enter text.");
       return;
@@ -159,13 +156,6 @@ export default function Chat() {
     <>
       <main>
         <Container className="justify-content-center">
-          {/* <div className="mt-5">
-            {currentUser && (
-              <div className="mt-2">
-                <p className="mx-2">Welcome, {currentUser.displayName}</p>{" "}
-              </div>
-            )}
-          </div> */}
           <div className="my-3">
             <Link to="/dashboard" className="text-dark text-decoration-none">
              <span><IoMdArrowBack size={25} /></span> Back to Dashboard
