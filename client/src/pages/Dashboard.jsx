@@ -14,6 +14,7 @@ export default function Dashboard() {
           <p className="mb-0">Welcome, {currentUser.displayName}</p>
         </div>
         <ChatCards />
+         <Button className="mt-1" onClick={() => {throw new Error("This is your first error!");}}>Break the world</Button>
       </div>
     </Container>
   );
