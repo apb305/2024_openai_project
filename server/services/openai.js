@@ -18,22 +18,32 @@ const waitForRunCompletion = async (openai, threadId, runId) => {
 };
 
 const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
+
   const chatId = uuidv4();
 
   const fileStream = fs.createReadStream(newfile.path);
+
+  const assistant = await openai.beta.assistants.create({
+    instructions:
+      "You are a helpful assistance named Jake, and your job is to review the files that are uploaded and help provide answers to solutions. Rules: 1. Only use the provided context.",
+    name: "File Analyzer Assistant",
+    model: "gpt-4o",
+    tools: [{ type: "file_search" }]
+  });
 
   const file = await openai.files.create({
     file: fileStream,
     purpose: "assistants",
   });
 
-  const assistant = await openai.beta.assistants.create({
-    instructions:
-      "You are a helpful assistance named Jake, and your job is to review the files that are uploaded and help provide answers to solutions. Rules: 1. Only use the provided context.",
-    name: "File Analyzer Assistant",
-    model: "gpt-4-turbo",
-    tools: [{ type: "retrieval" }],
-    file_ids: [file.id],
+  let vectorStore = await openai.beta.vectorStores.create({
+    name: newfile.originalname,
+  });
+
+  await openai.beta.vectorStores.fileBatches.createAndPoll(vectorStore.id, { file_ids: [file.id] });
+
+  await openai.beta.assistants.update(assistant.id, {
+    tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } },
   });
 
   const thread = await openai.beta.threads.create();
@@ -73,7 +83,7 @@ const createThreadAndRunAssistant = async (openai, uid, text, newfile) => {
 
 const getOpenAIResponse = async (text, chatId, uid, newFile) => {
   const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY, defaultHeaders: { "OpenAI-Beta": "assistants=v2" }
   });
 
   const threadExists = await Chat.findOne({ chatId: chatId });

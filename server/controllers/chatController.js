@@ -6,7 +6,7 @@ const Chat = mongoose.model("chats");
 const fs = require("fs");
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY, defaultHeaders: { "OpenAI-Beta": "assistants=v2" }
 });
 
 const generateResponse = async (req, res) => {
@@ -69,7 +69,7 @@ const getChat = async (req, res) => {
       res.status(200).json([]);
     }
   } catch (error) {
-    res.status(400).send("An error has occured");
+    res.status(400).send(error);
   }
 };
 
